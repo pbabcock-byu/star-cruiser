@@ -57,31 +57,31 @@ DESIGN DOCUMENT:
 
 # Alex
 
-Notes:
-screen not so wide
-
-- - - - SPACE SHIP
+- - - - - - - - SPACE SHIP
 
 Starts out with number of shields (health points) - possibly get more
 
 Space ship that draws more than one text
 
-A
-<=#=>
-" animates between " ' red orange
+Spaceship drawing:
+-front`A`
+-mid`<=#=>`
+-thrst`"`
+(thrust animates between `"` and `'`)
 
-Movement: moves left and right
+Movement: moves left and right (arrow keys)
 collision between ship and enemies
 
-- - - - BULLETS
+- - - - - - - - BULLETS
 
-| ^
+either `|` or `^`
+possibly upgrade to multiple lasers at once
 
-Fire key
-timer to control how rapid fire
+Fire key (space bar)
+timer to control rapid fire
 collision between laser and enemies
 
-- - - - ENEMIES (Parent class)
+- - - - - - - - ENEMIES (Parent class)
 
 Enemies are children of parent class
 
@@ -89,16 +89,26 @@ different enemies have movement patterns
 
 Types:
 Asteroids ( different sizes)
-(Snake)
+Snake enemy (moves back and forth coming down screen) Splits when shot?
 
-- - - - ENEMY DIFFICULTY CONTROLLER
+- - - - - - - - ENEMY DIFFICULTY CONTROLLER
 
 timer
 minute 1 small asteroids
 minute 2 big asteroids
 minute 3 snakes
 
-- - - - SCORE
+- - - - - - - - SCORE
 
 array of top five scores
 highscore board with name - enter in initials
+
+- - - - - - - - COLLISION
+                between:
+                all enemies (use parent class) and ship
+                all enemies and ship bullets
+
+- - - - - - - - ADDITIONAL TASKS
+
+- Screen not so wide
+- Higher resolution? (smaller grid size and font)
