@@ -56,3 +56,49 @@ DESIGN DOCUMENT:
 # Kyle
 
 # Alex
+
+Notes:
+screen not so wide
+
+- - - - SPACE SHIP
+
+Starts out with number of shields (health points) - possibly get more
+
+Space ship that draws more than one text
+
+A
+<=#=>
+" animates between " ' red orange
+
+Movement: moves left and right
+collision between ship and enemies
+
+- - - - BULLETS
+
+| ^
+
+Fire key
+timer to control how rapid fire
+collision between laser and enemies
+
+- - - - ENEMIES (Parent class)
+
+Enemies are children of parent class
+
+different enemies have movement patterns
+
+Types:
+Asteroids ( different sizes)
+(Snake)
+
+- - - - ENEMY DIFFICULTY CONTROLLER
+
+timer
+minute 1 small asteroids
+minute 2 big asteroids
+minute 3 snakes
+
+- - - - SCORE
+
+array of top five scores
+highscore board with name - enter in initials
