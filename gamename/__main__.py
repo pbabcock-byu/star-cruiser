@@ -2,9 +2,7 @@ import constants
 
 from game.casting.cast import Cast
 from game.casting.score import Score
-
-# some sort of class that is the main player
-
+from game.casting.ship import Ship
 from game.scripting.script import Script
 from game.scripting.control_actors_action import ControlActorsAction
 from game.scripting.move_actors_action import MoveActorsAction
@@ -25,6 +23,7 @@ def main():
     # create some instance of class that is the main player
 
     # create
+    cast.add_actor("ships", Ship())
     cast.add_actor("scores", Score())
 
     # start the game
