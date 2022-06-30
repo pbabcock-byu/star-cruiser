@@ -17,16 +17,9 @@ class Ship(Actor):
         super().__init__()
         self._parts = []
         self._prepare_shape()
-        self._is_dead = False
 
     def get_parts(self):
         return self._parts
-
-    def get_is_dead(self):
-        return self._is_dead
-
-    def set_is_dead(self, is_dead):
-        self._is_dead = is_dead
 
     def move_next(self):
         # move all parts
