@@ -1,16 +1,21 @@
 from game.shared.color import Color
 
 
+# Game grid sizes
 COLUMNS = 40
 ROWS = 60
 CELL_SIZE = 15
-MAX_X = 600
-MAX_Y = 700
+
+# Screen size
+MAX_X = 600  # COLUMNS * CELL_SIZE
+MAX_Y = 705  # ROWS * CELL_SIZE
+
+# Pyray window settings
 FRAME_RATE = 10
 FONT_SIZE = 15
-CAPTION = "Welcome to the game NAME HERE. Note: Player one is Green, Player two is Red"
-SNAKE_LENGTH = 4
+CAPTION = "STAR CRUISER 5000 ✈"
 
+# Colors
 WHITE = Color(255, 255, 255)
 RED = Color(255, 0, 0)
 YELLOW = Color(255, 255, 0)
@@ -19,7 +24,7 @@ BROWN = Color(165, 42, 42)
 BLUE = Color(105, 190, 255)
 ORANGE = Color(255, 190, 0)
 
-# Ship shields and Damage
+# Ship shields and damage
 STARTSHEILDS = 20
 LOWSHIELDS = 5
 
@@ -27,7 +32,7 @@ ASTEROIDSLRG_DAMAGE = 3
 ASTEROIDSMED_DAMAGE = 2
 ASTEROIDSSML_DAMAGE = 1
 
-# SOUND
+# Sound
 SHIPFIRE_SOUND = ""
 ASTEROIDSEXPLOSION_SOUND = ""
 SHIPSEXPLOSION_SOUND = ""
