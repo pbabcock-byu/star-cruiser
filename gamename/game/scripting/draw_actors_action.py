@@ -26,20 +26,32 @@ class DrawActorsAction(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
+        # GET ACTORS TO DRAW - - - -
+
+        # get display elements
         score = cast.get_first_actor("scores")
-
         shield = cast.get_first_actor("shields")
-
-        # code for drawing player
+        messages = cast.get_actors("messages")
+        # get ship parts
         ship = cast.get_first_actor("ships")
         parts = ship.get_parts()
-        messages = cast.get_actors("messages")
+        # get lasers
         lasers = cast.get_actors("lasers")
+        # get asteroids
+        asteroids = cast.get_actors("asteroids")
+
+        # DRAW ACTORS - - - - - - -
 
         self._video_service.clear_buffer()
-        self._video_service.draw_actors(parts)
-        self._video_service.draw_actors(lasers)
+        # draw hud elements
         self._video_service.draw_actor(score)
         self._video_service.draw_actor(shield)
         self._video_service.draw_actors(messages, True)
+        # draw player ship
+        self._video_service.draw_actors(parts)
+        # draw lasers
+        self._video_service.draw_actors(lasers)
+        # draw asteroids
+        self._video_service.draw_actors(asteroids)
+
         self._video_service.flush_buffer()

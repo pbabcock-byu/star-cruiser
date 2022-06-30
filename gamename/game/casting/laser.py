@@ -18,7 +18,7 @@ class Laser(Actor):
         self._cast = cast
 
     def move_next(self):
-        """Moves the actor to its next position according to its velocity. Will wrap the position 
+        """ (OVERRIDE) Moves the actor to its next position according to its velocity. Will wrap the position 
         from one side of the screen to the other when it reaches the given maximum (X ONLY FOR LASER).
 
         Args:
