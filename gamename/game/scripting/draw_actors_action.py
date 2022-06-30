@@ -28,6 +28,8 @@ class DrawActorsAction(Action):
         """
         score = cast.get_first_actor("scores")
 
+        shield = cast.get_first_actor("shields")
+
         # code for drawing player
         ship = cast.get_first_actor("ships")
         parts = ship.get_parts()
@@ -36,5 +38,6 @@ class DrawActorsAction(Action):
         self._video_service.clear_buffer()
         self._video_service.draw_actors(parts)
         self._video_service.draw_actor(score)
+        self._video_service.draw_actor(shield)
         self._video_service.draw_actors(messages, True)
         self._video_service.flush_buffer()
