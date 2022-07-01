@@ -1,7 +1,9 @@
 import constants
+import random
 from game.casting.actor import Actor
 from game.scripting.action import Action
 from game.shared.point import Point
+from game.casting.explosion import Explosion
 
 
 class HandleCollisionsAction(Action):
@@ -33,45 +35,70 @@ class HandleCollisionsAction(Action):
         if not self._is_game_over:
 
             # self._handle_snakes_collision(cast)
-            # self._handle_segment_collision(cast)
+            self._handle_laser_enemy_collision(cast, ["asteroids"])
+            self._handle_player_enemy_collision(cast, ["asteroids"])
 
             self._handle_game_over(cast)
         else:
-            if self._keyboard_service.is_key_down('y'):
+            if self._keyboard_service.is_key_down('enter'):
                 # reset game over variable
                 self._is_game_over = False
                 # remove game over message
                 cast.remove_actor("messages", cast.get_first_actor("messages"))
 
                 # reset snake bodies
-                # snakes = cast.get_actors("snakes")
-                # for snake in snakes:
-                #     snake._reset_body()
+                ship = cast.get_first_actor("ships")
+                ship.reset_ship()
 
-    # USE AS REFERENCE FOR PLAYER COLLISION
-    # def _handle_snakes_collision(self, cast):
-    #     """Sets the game over flag if a snake head collides with a segment from another snake.
+    def _handle_laser_enemy_collision(self, cast, groups):
+        """Destroys enemies when laser hits them
 
-    #     Args:
-    #         cast (Cast): The cast of Actors in the game.
-    #     """
-    #     snakes = cast.get_actors("snakes")
+        Args:
+            cast (Cast): The cast of Actors in the game.
+        """
+        lasers = cast.get_actors("lasers")
+        # for every laser
+        for laser in lasers:
+            # loop through every group in the groups list
+            for group in groups:
+                # loop through every enemy in this group
+                for enemy in cast.get_actors(group):
+                    # for every segment in this other snake
+                    laser_position = laser.get_position()
+                    laser_last_position = Point(laser.get_position().get_x(
+                    ), laser.get_position().get_y()+constants.CELL_SIZE)
+                    if laser_position.equals(enemy.get_position()) or laser_last_position.equals(enemy.get_position()):
+                        # create an explosion at the lasers position
+                        explosion = Explosion(cast)
+                        explosion.set_text(".")
+                        explosion.set_color(constants.WHITE)
+                        explosion.set_velocity(Point(0, 1))
+                        explosion.set_position(laser.get_position())
+                        # add explosion to "explosions" cast group
+                        cast.add_actor("explosions", explosion)
 
-    #     # for every snake
-    #     for snake in snakes:
-    #         head = snake.get_segments()[0]
-    #         # loop through every other snake
-    #         for other in snakes:
-    #             # make sure its not ourselves
-    #             if other != snake:
-    #                 for segment in other.get_segments():
-    #                     # for every segment in this other snake
-    #                     if head.get_position().equals(segment.get_position()):
-    #                         # if head collides with any, game over
-    #                         self._is_game_over = True
-    #                         # assign winner to the other player
-    #                         self._who_won = self._return_player_color(
-    #                             other.get_player())
+                        # delete the laser and enemy
+                        cast.remove_actor("lasers", laser)
+                        cast.remove_actor(group, enemy)
+                        break
+
+    def _handle_player_enemy_collision(self, cast, groups):
+        """Sets the game over flag if a snake head collides with a segment from another snake.
+
+        Args:
+            cast (Cast): The cast of Actors in the game.
+        """
+        ship = cast.get_first_actor("ships")
+
+        parts = ship.get_parts()
+        # loop through every part
+        for part in parts:
+            for group in groups:
+                # loop through every enemy in this group
+                for enemy in cast.get_actors(group):
+                    if part.get_position().equals(enemy.get_position()):
+                        # if head collides with any, game over
+                        self._is_game_over = True
 
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.
@@ -91,11 +118,21 @@ class HandleCollisionsAction(Action):
             message.set_position(position)
             cast.add_actor("messages", message)
 
-            # snakes = cast.get_actors("snakes")
-            # # turn all segments of all snakes white
-            # for snake in snakes:
-            #     segments = snake.get_segments()
-            #     for index, segment in enumerate(segments):
-            #         # leave one colored spot to identify which is which
-            #         if index != 1:
-            #             segment.set_color(constants.WHITE)
+            ship = cast.get_first_actor("ships")
+            parts = ship.get_parts()
+            # loop through every part
+            for part in parts:
+                # create an explosion at the parts position
+                explosion = Explosion(cast)
+                explosion.set_text(".")
+                explosion.set_color(constants.WHITE)
+                explosion.set_velocity(Point(0, 1))
+                explosion.set_position(part.get_position())
+                explosion.set_animate_speed(0.1 + random.random()*0.8)
+                # add explosion to "explosions" cast group
+                cast.add_actor("explosions", explosion)
+
+            # delete the ship parts
+            ship.remove_parts()
+            # delete all enemies
+            cast.remove_actors("asteroids")

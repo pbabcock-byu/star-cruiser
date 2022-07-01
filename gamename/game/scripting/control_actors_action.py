@@ -67,7 +67,7 @@ class ControlActorsAction(Action):
             # set a velocity to move upward
             velocity = Point(0, -constants.CELL_SIZE)
             text = "^"
-            color = constants.RED
+            color = constants.GREEN
             # apply attributes to a new instance of laser
             laser = Laser(cast)
             laser.set_position(position)

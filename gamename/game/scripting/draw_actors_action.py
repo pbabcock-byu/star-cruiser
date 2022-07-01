@@ -27,7 +27,6 @@ class DrawActorsAction(Action):
             script (Script): The script of Actions in the game.
         """
         # GET ACTORS TO DRAW - - - -
-
         # get display elements
         score = cast.get_first_actor("scores")
         shield = cast.get_first_actor("shields")
@@ -39,9 +38,10 @@ class DrawActorsAction(Action):
         lasers = cast.get_actors("lasers")
         # get asteroids
         asteroids = cast.get_actors("asteroids")
+        # get explosions
+        explosions = cast.get_actors("explosions")
 
         # DRAW ACTORS - - - - - - -
-
         self._video_service.clear_buffer()
         # draw hud elements
         self._video_service.draw_actor(score)
@@ -53,5 +53,7 @@ class DrawActorsAction(Action):
         self._video_service.draw_actors(lasers)
         # draw asteroids
         self._video_service.draw_actors(asteroids)
+        # draw explosions
+        self._video_service.draw_actors(explosions)
 
         self._video_service.flush_buffer()

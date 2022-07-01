@@ -21,13 +21,16 @@ RED = Color(255, 0, 0)
 YELLOW = Color(255, 255, 0)
 GREEN = Color(0, 255, 0)
 BROWN = Color(165, 42, 42)
-BLUE = Color(105, 190, 255)
+BLUE = Color(5, 90, 255)
 ORANGE = Color(255, 190, 0)
 
 # Ship shields and damage
 STARTSHEILDS = 20
 LOWSHIELDS = 5
 
+# Asteroid attributes
+ASTEROID_TYPES = [["SML", "`"], ["MED", "*"],
+                  ["LRG", "@"], ["SML-xmove", "."]]
 ASTEROIDSLRG_DAMAGE = 3
 ASTEROIDSMED_DAMAGE = 2
 ASTEROIDSSML_DAMAGE = 1

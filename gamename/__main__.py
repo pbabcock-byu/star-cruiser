@@ -22,10 +22,9 @@ def main():
     # create the cast
     cast = Cast()
 
-    # create some instance of class that is the main player
-
-    # create
+    # create player ship
     cast.add_actor("ships", Ship())
+    # create display elements
     cast.add_actor("scores", Score())
     cast.add_actor("shields", Shields())
 

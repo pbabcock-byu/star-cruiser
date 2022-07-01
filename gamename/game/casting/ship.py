@@ -21,17 +21,25 @@ class Ship(Actor):
     def get_parts(self):
         return self._parts
 
+    def remove_parts(self):
+        self._parts.clear()
+
+    def reset_ship(self):
+        self._prepare_shape()
+
     def move_next(self):
-        # move all parts
-        for part in self._parts:
-            part.move_next()
-        # animate thrust
-        if self._parts[7].get_text() == '*':
-            self._parts[7].set_text("'")
-            self._parts[7].set_color(constants.ORANGE)
-        else:
-            self._parts[7].set_text('*')
-            self._parts[7].set_color(constants.RED)
+        # if the body exists
+        if len(self._parts) > 0:
+            # move all parts
+            for part in self._parts:
+                part.move_next()
+            # animate thrust
+            if self._parts[7].get_text() == '*':
+                self._parts[7].set_text("'")
+                self._parts[7].set_color(constants.ORANGE)
+            else:
+                self._parts[7].set_text('*')
+                self._parts[7].set_color(constants.RED)
 
     def control_ship(self, velocity):
         for part in self._parts:
@@ -43,7 +51,7 @@ class Ship(Actor):
 
         ship_layout_info = [["+", 0, 0, 0], ["A", 0, 1, 0], ["H", 0, 2, 1], [
             "=", -1, 2, 0], ["=", 1, 2, 0], ["_", -2, 2, 0], ["_", 2, 2, 0], ['*', 0, 3, 2]]
-        ship_color_info = [constants.GREEN, constants.BLUE, constants.RED]
+        ship_color_info = [constants.BLUE, constants.WHITE, constants.RED]
 
         for ship_part in ship_layout_info:
             position = Point(

@@ -26,7 +26,7 @@ class HandleEnemyCreation(Action):
         self._wait_spawn = 0
         self._game_stages = [
             {
-                "starttime": 4,
+                "starttime": 14,
                 "endtime": 18,
                 "enemytypes": ["asteroid-small"],
                 "waitspawn": 3,
@@ -46,6 +46,14 @@ class HandleEnemyCreation(Action):
                 "endtime": 55,
                 "enemytypes": ["asteroid-large"],
                 "waitspawn": 5,
+                "randomocity": 50,
+                "stagename": "second"
+            },
+            {
+                "starttime": 1,
+                "endtime": 10,
+                "enemytypes": ["asteroid-small-xmove", "asteroid-small"],
+                "waitspawn": 1,
                 "randomocity": 50,
                 "stagename": "second"
             }
@@ -83,6 +91,10 @@ class HandleEnemyCreation(Action):
             asteroid = self._make_asteriod(cast, 2)
             cast.add_actor("asteroids", asteroid)
 
+        if enemy_type == "asteroid-small-xmove":
+            asteroid = self._make_asteriod(cast, 3)
+            cast.add_actor("asteroids", asteroid)
+
     def _handle_stage_progression(self, cast):
         """ Blah
         Args:
@@ -118,8 +130,6 @@ class HandleEnemyCreation(Action):
         Returns:
             reference to the new meteoroid
         """
-        # define
-        asteroid_types = [["SML", "`"], ["MED", "*"], ["LRG", "@"]]
 
         x = random.randint(1, constants.COLUMNS - 1)
         y = random.randint(-5, -3)
@@ -127,12 +137,19 @@ class HandleEnemyCreation(Action):
         position = Point(x, y)
         position = position.scale(constants.CELL_SIZE)
 
+        if asteroidtype == 3:
+            velocity = Point(random.choice(
+                [-constants.CELL_SIZE, constants.CELL_SIZE]), constants.CELL_SIZE)
+        else:
+            velocity = Point(0, constants.CELL_SIZE)
+
         asteroid = Asteroid(cast)
-        type = asteroid_types[asteroidtype]
+        type = constants.ASTEROID_TYPES[asteroidtype]
         asteroid.set_type(type[0])
         asteroid.set_text(type[1])
         asteroid.set_color(constants.BROWN)
         asteroid.set_position(position)
-        asteroid.set_velocity(Point(0, constants.CELL_SIZE))
+        asteroid.set_velocity(velocity)
+
         # returns it so we can add it to the cast "asteriods" group
         return asteroid
