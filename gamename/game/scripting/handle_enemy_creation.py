@@ -63,16 +63,16 @@ class HandleEnemyCreation(Action):
             },
             {
                 "starttime": 58,
-                "endtime": 65,
+                "endtime": 64,
                 "enemytypes": ["asteroid-small-xmove", "asteroid-small"],
-                "waitspawn": 0.5,
-                "randomocity": 5,
+                "waitspawn": 2,
+                "randomocity": 2,
                 "stagedisplay": "none"
             },
             {
                 "starttime": 72,
                 "endtime": 76,
-                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
+                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
                 "waitspawn": 2,
                 "randomocity": 0,
                 "stagedisplay": "none"
@@ -80,8 +80,8 @@ class HandleEnemyCreation(Action):
             {
                 "starttime": 90,
                 "endtime": 95,
-                "enemytypes": ["asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove"],
-                "waitspawn": 0.8,
+                "enemytypes": ["asteroid-small", "asteroid-small", "asteroid-small"],
+                "waitspawn": 0.2,
                 "randomocity": 2,
                 "stagedisplay": "none"
             },
@@ -100,23 +100,23 @@ class HandleEnemyCreation(Action):
             },
             {
                 "starttime": 108,
-                "endtime": 113,
+                "endtime": 120,
                 "enemytypes": ["asteroid-huge"],
-                "waitspawn": 2,
+                "waitspawn": 1,
                 "randomocity": 4,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 116,
-                "endtime": 122,
-                "enemytypes": ["asteroid-giant", "asteroid-small-xmove", "asteroid-small-xmove"],
-                "waitspawn": 3,
+                "starttime": 128,
+                "endtime": 138,
+                "enemytypes": ["asteroid-giant"],
+                "waitspawn": 2,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 123,
-                "endtime": 124,
+                "starttime": 139,
+                "endtime": 140,
                 "stagedisplay": "You beat the game! (so far)"
             },
         ]
@@ -215,6 +215,9 @@ class HandleEnemyCreation(Action):
                         display.set_color(constants.WHITE)
 
             else:
+                # reset
+                self._wait_spawn = 0
+
                 # update _game_stage
                 if self._no_enemies_exist(cast):
                     # increment game timer
