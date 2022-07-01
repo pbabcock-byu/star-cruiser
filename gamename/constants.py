@@ -17,6 +17,7 @@ CAPTION = "STAR CRUISER 5000 ✈"
 
 # Colors
 WHITE = Color(255, 255, 255)
+BLACK = Color(0, 0, 0)
 RED = Color(255, 0, 0)
 YELLOW = Color(255, 255, 0)
 GREEN = Color(0, 255, 0)
@@ -30,13 +31,19 @@ LOWSHIELDS = 5
 
 # Asteroid attributes
 ASTEROID_TYPES = [["SML", "`"], ["MED", "*"],
-                  ["LRG", "@"], ["SML-xmove", "."], ["HUGE", "@"]]
+                  ["LRG", "@"], ["SML-xmove", "."], ["HUGE", "@"], ["GIANT", "☐"]]
 ASTEROIDSLRG_DAMAGE = 3
 ASTEROIDSMED_DAMAGE = 2
 ASTEROIDSSML_DAMAGE = 1
 
-ASTEROID_SINGLE_HEALTH = 1
-ASTEROIDS_HUGE_HEALTH = 3
+ASTEROID_HEALTH_LIST = {
+    "SML": 1,
+    "MED": 1,
+    "LRG": 2,
+    "SML-xmove": 1,
+    "HUGE": 3,
+    "GIANT": 5
+}
 
 # Sound
 SHIPFIRE_SOUND = ""

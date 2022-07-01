@@ -35,7 +35,7 @@ class HandleEnemyCreation(Action):
             {
                 "starttime": 3,
                 "endtime": 18,
-                "enemytypes": ["asteroid-huge", "asteroid-medium"],
+                "enemytypes": ["asteroid-small"],
                 "waitspawn": 5,
                 "randomocity": 5,
                 "stagedisplay": "none"
@@ -52,7 +52,7 @@ class HandleEnemyCreation(Action):
                 "starttime": 37,
                 "endtime": 55,
                 "enemytypes": ["asteroid-large", "asteroid-large"],
-                "waitspawn": 4,
+                "waitspawn": 8,
                 "randomocity": 8,
                 "stagedisplay": "none"
             },
@@ -65,7 +65,7 @@ class HandleEnemyCreation(Action):
                 "starttime": 58,
                 "endtime": 65,
                 "enemytypes": ["asteroid-small-xmove", "asteroid-small"],
-                "waitspawn": 1,
+                "waitspawn": 0.5,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
@@ -73,7 +73,7 @@ class HandleEnemyCreation(Action):
                 "starttime": 72,
                 "endtime": 76,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
-                "waitspawn": 3,
+                "waitspawn": 2,
                 "randomocity": 0,
                 "stagedisplay": "none"
             },
@@ -81,7 +81,7 @@ class HandleEnemyCreation(Action):
                 "starttime": 90,
                 "endtime": 95,
                 "enemytypes": ["asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove"],
-                "waitspawn": 0.3,
+                "waitspawn": 0.8,
                 "randomocity": 2,
                 "stagedisplay": "none"
             },
@@ -94,13 +94,29 @@ class HandleEnemyCreation(Action):
                 "starttime": 98,
                 "endtime": 103,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
-                "waitspawn": 0.1,
+                "waitspawn": 1,
+                "randomocity": 10,
+                "stagedisplay": "none"
+            },
+            {
+                "starttime": 108,
+                "endtime": 113,
+                "enemytypes": ["asteroid-huge"],
+                "waitspawn": 2,
                 "randomocity": 4,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 104,
-                "endtime": 106,
+                "starttime": 116,
+                "endtime": 122,
+                "enemytypes": ["asteroid-giant", "asteroid-small-xmove", "asteroid-small-xmove"],
+                "waitspawn": 3,
+                "randomocity": 5,
+                "stagedisplay": "none"
+            },
+            {
+                "starttime": 123,
+                "endtime": 124,
                 "stagedisplay": "You beat the game! (so far)"
             },
         ]
@@ -141,6 +157,10 @@ class HandleEnemyCreation(Action):
 
         if enemy_type == "asteroid-huge":
             asteroid = self._make_asteriod(cast, 4)
+            cast.add_actor("asteroids", asteroid)
+
+        if enemy_type == "asteroid-giant":
+            asteroid = self._make_asteriod(cast, 5)
             cast.add_actor("asteroids", asteroid)
 
     def _handle_stage_progression(self, cast):
@@ -186,6 +206,13 @@ class HandleEnemyCreation(Action):
                     # delete the game stage display message
                     cast.remove_actor(
                         "messages", cast.get_first_actor("messages"))
+                    # reset other display color to show
+                    display_elements = cast.get_actors("scores")
+                    for display in display_elements:
+                        display.set_color(constants.WHITE)
+                    display_elements = cast.get_actors("shields")
+                    for display in display_elements:
+                        display.set_color(constants.WHITE)
 
             else:
                 # update _game_stage
@@ -195,6 +222,13 @@ class HandleEnemyCreation(Action):
 
                     if self._game_stage != current_stage["stagedisplay"]:
                         self._game_stage = current_stage["stagedisplay"]
+                        # hide current display elements
+                        display_elements = cast.get_actors("scores")
+                        for display in display_elements:
+                            display.set_color(constants.BLACK)
+                        display_elements = cast.get_actors("shields")
+                        for display in display_elements:
+                            display.set_color(constants.BLACK)
                         # display game stage name as a message on the screen
                         x = int(constants.MAX_X / 2)
                         y = int(constants.MAX_Y / 2)
@@ -229,7 +263,7 @@ class HandleEnemyCreation(Action):
         """
 
         x = random.randint(1, constants.COLUMNS - 1)
-        y = 5  # random.randint(-4 - self._randomocity, -4)
+        y = random.randint(-5 - self._randomocity, -4)
 
         position = Point(x, y)
         position = position.scale(constants.CELL_SIZE)

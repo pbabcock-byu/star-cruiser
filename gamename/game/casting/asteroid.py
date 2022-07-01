@@ -3,6 +3,7 @@ import constants
 import random
 from game.casting.actor import Actor
 from game.shared.point import Point
+from game.casting.explosion import Explosion
 
 
 class Asteroid(Actor):
@@ -23,7 +24,7 @@ class Asteroid(Actor):
         self._move_wait = 4
         self._move_timer = 0
         self._parts = [self]
-        self._health = constants.ASTEROID_SINGLE_HEALTH
+        self._health = constants.ASTEROID_HEALTH_LIST[self._type]
 
     def get_parts(self):
         return self._parts
@@ -35,12 +36,36 @@ class Asteroid(Actor):
         """
         return self._type
 
+    def get_health(self):
+        return self._health
+
+    def remove_health(self, amount):
+        self._health -= amount
+        # check to see if we are out of health
+        if self._health <= 0:
+            for part in self._parts:
+                # create an explosion at the parts position
+                explosion = Explosion(self._cast)
+                explosion.set_text(".")
+                explosion.set_color(constants.WHITE)
+                explosion.set_velocity(
+                    Point(random.randint(-1, 1), random.randint(0, 2)))
+                explosion.set_position(part.get_position())
+                explosion.set_animate_speed(0.3 + random.random()*0.7)
+                # add explosion to "explosions" cast group
+                self._cast.add_actor("explosions", explosion)
+            # remove ourselves
+            self._cast.remove_actor("asteroids", self)
+
     def set_up_parts(self):
         """Updates Asteriod's size.
         Args:
             type (string): The Asteriod's size.
         """
         # update attributes based on type
+        # health
+        self._health = constants.ASTEROID_HEALTH_LIST[self._type]
+        # move speed
         if self._type == "SML":
             self._move_wait = random.choice([2, 3, 4])
 
@@ -50,15 +75,12 @@ class Asteroid(Actor):
         if self._type == "LRG":
             self._move_wait = 4
 
-        if self._type in ["HUGE"]:
+        if self._type in ["HUGE", "GIANT"]:
             # this astroid is structure of multiple actors
-            # self._parts.clear()
+            self._move_wait = 5
+            self._prepare_structured_asteroid_body()
 
-            #self._health = constants.ASTEROIDS_HUGE_HEALTH
-            self._move_wait = 2
-            self._prepare_huge_asteroid_body()
-
-    def _prepare_huge_asteroid_body(self):
+    def _prepare_structured_asteroid_body(self):
         """
         Creates the structure of actors to form a huge asteroid
         self._parts
@@ -67,10 +89,34 @@ class Asteroid(Actor):
         origin = self.get_position()
 
         # set layout information
-        asteroid_layout = [["@", 0, 0, 0], ["@", 1, 0, 0], ["@", -1, 0, 0], ["@", 0, 1, 0], ["@", 0, -1, 0],
-                           ["@", -1, -1, 0], ["@", 1, -1, 0],
-                           ["@", -1, 1, 0], ["@", 1, 1, 0],
-                           ["@", -2, 0, 0], ["@", 0, -2, 0], ["@", 2, 0, 0], ["@", 0, 2, 0]]
+        if self._type == "HUGE":
+            asteroid_layout = [["@", 0, 0, 0], ["@", 1, 0, 0], ["@", -1, 0, 0], ["@", 0, 1, 0], ["@", 0, -1, 0],
+                               ["@", -1, -1, 0], ["@", 1, -1, 0],
+                               ["@", -1, 1, 0], ["@", 1, 1, 0],
+                               ["@", -2, 0, 0], ["@", 0, -2, 0], ["@", 2, 0, 0], ["@", 0, 2, 0]]
+        if self._type == "GIANT":
+            asteroid_layout = [["@", 0, 0, 0], ["@", 1, 0, 0], ["@", -1, 0, 0], ["@", 0, 1, 0], ["@", 0, -1, 0],
+                               ["@", -1, -1, 0], ["@", 1, -1, 0],
+                               ["@", -1, 1, 0], ["@", 1, 1, 0],
+                               ["@", -2, 0, 0], ["@", 0, -2, 0],
+                               ["@", 2, 0, 0], ["@", 0, 2, 0],
+
+                               ["@", -2, -2, 0], ["@", 2, -2, 0],
+                               ["@", -2, 2, 0], ["@", 2, 2, 0],
+
+                               ["@", -2, -1, 0], ["@", -2, 1, 0],
+                               ["@", 2, 1, 0], ["@", 2, -1, 0],
+                               ["@", -1, 2, 0], ["@", 1, 2, 0],
+                               ["@", 1, -2, 0], ["@", -1, -2, 0],
+
+                               ["@", -3, -1, 0], ["@", -3, 1, 0],
+                               ["@", 3, 1, 0], ["@", 3, -1, 0],
+                               ["@", -1, 3, 0], ["@", 1, 3, 0],
+                               ["@", 1, -3, 0], ["@", -1, -3, 0],
+                               ["@", 0, 3, 0], ["@", 0, -3, 0],
+                               ["@", -3, 0, 0], ["@", 3, 0, 0]
+                               ]
+
         asteroid_colors = [constants.BROWN]
 
         # generate parts list from layout

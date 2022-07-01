@@ -25,8 +25,12 @@ def main():
     # create player ship
     cast.add_actor("ships", Ship())
     # create display elements
-    cast.add_actor("scores", Score())
-    cast.add_actor("shields", Shields())
+    scores = Score()
+    shields = Shields()
+    scores.set_color(constants.WHITE)
+    shields.set_color(constants.WHITE)
+    cast.add_actor("scores", scores)
+    cast.add_actor("shields", shields)
 
     # start the game
     keyboard_service = KeyboardService()

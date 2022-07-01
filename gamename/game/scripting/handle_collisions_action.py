@@ -57,12 +57,19 @@ class HandleCollisionsAction(Action):
             cast (Cast): The cast of Actors in the game.
         """
         lasers = cast.get_actors("lasers")
+        hit = False
         # for every laser
         for laser in lasers:
+            if hit:
+                break
             # loop through every group in the groups list
             for group in groups:
+                if hit:
+                    break
                 # loop through every enemy in this group
                 for enemy in cast.get_actors(group):
+                    if hit:
+                        break
                     # loop through every enemy in this group
                     for enemypart in enemy._parts:
                         # get laser positions
@@ -80,9 +87,12 @@ class HandleCollisionsAction(Action):
                             # add explosion to "explosions" cast group
                             cast.add_actor("explosions", explosion)
 
-                            # delete the laser and enemy
+                            # apply damage from laser to enemy health
+                            enemy.remove_health(laser.get_damage())
+                            # delete the laser
                             cast.remove_actor("lasers", laser)
-                            cast.remove_actor(group, enemy)
+                            # break all loops
+                            hit = True
                             break
 
     def _handle_player_enemy_collision(self, cast, groups):

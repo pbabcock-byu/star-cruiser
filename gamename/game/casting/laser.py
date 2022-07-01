@@ -16,6 +16,10 @@ class Laser(Actor):
     def __init__(self, cast):
         super().__init__()
         self._cast = cast
+        self._damage = 1
+
+    def get_damage(self):
+        return self._damage
 
     def move_next(self):
         """ (OVERRIDE) Moves the actor to its next position according to its velocity. Will wrap the position 

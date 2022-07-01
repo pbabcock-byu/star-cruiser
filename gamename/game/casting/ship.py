@@ -23,7 +23,7 @@ class Ship(Actor):
         return self._is_hurt
 
     def set_is_hurt(self, is_hurt):
-        self._is_dead = is_hurt
+        self._is_hurt = is_hurt
 
     def get_parts(self):
         return self._parts
@@ -32,7 +32,7 @@ class Ship(Actor):
         self._parts.clear()
 
     def reset_ship(self):
-        self._prepare_shape()
+        self._prepare_ship()
 
     def move_next(self):
         # if the body exists

@@ -39,3 +39,7 @@ class Explosion(Actor):
             self.set_color(
                 self._frame_colors[self._frame_color_animation[floor(self._frame)]])
             self._frame += self._animate_speed
+            # move
+            x = (self._position.get_x() + self._velocity.get_x()) % constants.MAX_X
+            y = (self._position.get_y() + self._velocity.get_y()) % constants.MAX_Y
+            self._position = Point(x, y)
