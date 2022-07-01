@@ -117,3 +117,24 @@ class Actor:
             velocity (Point): The given velocity.
         """
         self._velocity = velocity
+
+    def _generate_structure(self, origin, velocity, layout_list, color_list):
+        """
+        Returns a list of actors according to a layout list
+        Used for creating multi-part structures (Ex: ship, asteroid)
+        """
+        parts = []
+        for part in layout_list:
+            x = origin.get_x() + part[1] * constants.CELL_SIZE
+            y = origin.get_y() + part[2] * constants.CELL_SIZE
+            position = Point(x, y)
+            text = part[0]
+            color = color_list[part[3]]
+            part = Actor()
+            part.set_position(position)
+            part.set_velocity(velocity)
+            part.set_text(text)
+            part.set_color(color)
+            parts.append(part)
+        # returns the list of parts
+        return parts

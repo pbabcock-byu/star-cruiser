@@ -30,10 +30,13 @@ LOWSHIELDS = 5
 
 # Asteroid attributes
 ASTEROID_TYPES = [["SML", "`"], ["MED", "*"],
-                  ["LRG", "@"], ["SML-xmove", "."]]
+                  ["LRG", "@"], ["SML-xmove", "."], ["HUGE", "@"]]
 ASTEROIDSLRG_DAMAGE = 3
 ASTEROIDSMED_DAMAGE = 2
 ASTEROIDSSML_DAMAGE = 1
+
+ASTEROID_SINGLE_HEALTH = 1
+ASTEROIDS_HUGE_HEALTH = 3
 
 # Sound
 SHIPFIRE_SOUND = ""

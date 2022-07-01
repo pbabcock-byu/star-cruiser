@@ -63,24 +63,27 @@ class HandleCollisionsAction(Action):
             for group in groups:
                 # loop through every enemy in this group
                 for enemy in cast.get_actors(group):
-                    # for every segment in this other snake
-                    laser_position = laser.get_position()
-                    laser_last_position = Point(laser.get_position().get_x(
-                    ), laser.get_position().get_y()+constants.CELL_SIZE)
-                    if laser_position.equals(enemy.get_position()) or laser_last_position.equals(enemy.get_position()):
-                        # create an explosion at the lasers position
-                        explosion = Explosion(cast)
-                        explosion.set_text(".")
-                        explosion.set_color(constants.WHITE)
-                        explosion.set_velocity(Point(0, 1))
-                        explosion.set_position(laser.get_position())
-                        # add explosion to "explosions" cast group
-                        cast.add_actor("explosions", explosion)
+                    # loop through every enemy in this group
+                    for enemypart in enemy._parts:
+                        # get laser positions
+                        laser_position = laser.get_position()
+                        laser_last_position = Point(laser.get_position().get_x(
+                        ), laser.get_position().get_y()+constants.CELL_SIZE)
 
-                        # delete the laser and enemy
-                        cast.remove_actor("lasers", laser)
-                        cast.remove_actor(group, enemy)
-                        break
+                        if laser_position.equals(enemypart.get_position()) or laser_last_position.equals(enemypart.get_position()):
+                            # create an explosion at the lasers position
+                            explosion = Explosion(cast)
+                            explosion.set_text(".")
+                            explosion.set_color(constants.WHITE)
+                            explosion.set_velocity(Point(0, 1))
+                            explosion.set_position(laser_last_position)
+                            # add explosion to "explosions" cast group
+                            cast.add_actor("explosions", explosion)
+
+                            # delete the laser and enemy
+                            cast.remove_actor("lasers", laser)
+                            cast.remove_actor(group, enemy)
+                            break
 
     def _handle_player_enemy_collision(self, cast, groups):
         """Sets the game over flag if a snake head collides with a segment from another snake.
@@ -96,9 +99,10 @@ class HandleCollisionsAction(Action):
             for group in groups:
                 # loop through every enemy in this group
                 for enemy in cast.get_actors(group):
-                    if part.get_position().equals(enemy.get_position()):
-                        # if head collides with any, game over
-                        self._is_game_over = True
+                    for enemypart in enemy._parts:
+                        if part.get_position().equals(enemypart.get_position()):
+                            # if head collides with any, game over
+                            self._is_game_over = True
 
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.

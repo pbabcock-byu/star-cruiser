@@ -37,7 +37,12 @@ class DrawActorsAction(Action):
         # get lasers
         lasers = cast.get_actors("lasers")
         # get asteroids
+        asteroid_parts = []
         asteroids = cast.get_actors("asteroids")
+        for asteroid in asteroids:
+            for part in asteroid.get_parts():
+                asteroid_parts.append(part)
+
         # get explosions
         explosions = cast.get_actors("explosions")
 
@@ -52,7 +57,8 @@ class DrawActorsAction(Action):
         # draw lasers
         self._video_service.draw_actors(lasers)
         # draw asteroids
-        self._video_service.draw_actors(asteroids)
+        self._video_service.draw_actors(asteroid_parts)
+
         # draw explosions
         self._video_service.draw_actors(explosions)
 

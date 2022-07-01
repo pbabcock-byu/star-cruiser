@@ -35,8 +35,8 @@ class HandleEnemyCreation(Action):
             {
                 "starttime": 3,
                 "endtime": 18,
-                "enemytypes": ["asteroid-small"],
-                "waitspawn": 2,
+                "enemytypes": ["asteroid-huge", "asteroid-medium"],
+                "waitspawn": 5,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
@@ -139,6 +139,10 @@ class HandleEnemyCreation(Action):
             asteroid = self._make_asteriod(cast, 3)
             cast.add_actor("asteroids", asteroid)
 
+        if enemy_type == "asteroid-huge":
+            asteroid = self._make_asteriod(cast, 4)
+            cast.add_actor("asteroids", asteroid)
+
     def _handle_stage_progression(self, cast):
         """ Blah
         Args:
@@ -225,24 +229,21 @@ class HandleEnemyCreation(Action):
         """
 
         x = random.randint(1, constants.COLUMNS - 1)
-        y = random.randint(-4 - self._randomocity, -4)
+        y = 5  # random.randint(-4 - self._randomocity, -4)
 
         position = Point(x, y)
         position = position.scale(constants.CELL_SIZE)
-
+        velocity = Point(0, constants.CELL_SIZE)
         if asteroidtype == 3:
             velocity = Point(random.choice(
                 [-constants.CELL_SIZE, constants.CELL_SIZE]), constants.CELL_SIZE)
-        else:
-            velocity = Point(0, constants.CELL_SIZE)
 
-        asteroid = Asteroid(cast)
         type = constants.ASTEROID_TYPES[asteroidtype]
-        asteroid.set_type(type[0])
+        asteroid = Asteroid(cast, type[0])
         asteroid.set_text(type[1])
         asteroid.set_color(constants.BROWN)
         asteroid.set_position(position)
         asteroid.set_velocity(velocity)
-
+        asteroid.set_up_parts()
         # returns it so we can add it to the cast "asteriods" group
         return asteroid

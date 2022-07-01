@@ -12,16 +12,21 @@ class Asteroid(Actor):
     Also the bigger an the less points the player will get for shooting it
 
     Attributes:
-        _type (String): "LRG" or "MED" or "SML"
+        _type (String): "LRG" or "MED" or "SML" or "HUGE"
     """
 
-    def __init__(self, cast):
+    def __init__(self, cast, type):
         super().__init__()
         self._cast = cast
         # default attributes
-        self._type = "SML"
+        self._type = type
         self._move_wait = 4
         self._move_timer = 0
+        self._parts = [self]
+        self._health = constants.ASTEROID_SINGLE_HEALTH
+
+    def get_parts(self):
+        return self._parts
 
     def get_type(self):
         """Gets the Asteriod's size
@@ -30,24 +35,47 @@ class Asteroid(Actor):
         """
         return self._type
 
-    def set_type(self, type):
+    def set_up_parts(self):
         """Updates Asteriod's size.
         Args:
             type (string): The Asteriod's size.
         """
-        self._type = type
         # update attributes based on type
         if self._type == "SML":
             self._move_wait = random.choice([2, 3, 4])
-            self._move_timer = 0
 
         if self._type == "MED":
             self._move_wait = random.choice([3, 4])
-            self._move_timer = 0
 
         if self._type == "LRG":
             self._move_wait = 4
-            self._move_timer = 0
+
+        if self._type in ["HUGE"]:
+            # this astroid is structure of multiple actors
+            # self._parts.clear()
+
+            #self._health = constants.ASTEROIDS_HUGE_HEALTH
+            self._move_wait = 2
+            self._prepare_huge_asteroid_body()
+
+    def _prepare_huge_asteroid_body(self):
+        """
+        Creates the structure of actors to form a huge asteroid
+        self._parts
+        """
+        # set origin position
+        origin = self.get_position()
+
+        # set layout information
+        asteroid_layout = [["@", 0, 0, 0], ["@", 1, 0, 0], ["@", -1, 0, 0], ["@", 0, 1, 0], ["@", 0, -1, 0],
+                           ["@", -1, -1, 0], ["@", 1, -1, 0],
+                           ["@", -1, 1, 0], ["@", 1, 1, 0],
+                           ["@", -2, 0, 0], ["@", 0, -2, 0], ["@", 2, 0, 0], ["@", 0, 2, 0]]
+        asteroid_colors = [constants.BROWN]
+
+        # generate parts list from layout
+        self._parts = self._generate_structure(
+            origin, self._velocity, asteroid_layout, asteroid_colors)
 
     def move_next(self):
         """ (OVERRIDE) Moves the actor to its next position according to its velocity. Will wrap the position 
@@ -56,21 +84,23 @@ class Asteroid(Actor):
         Args:
             max_x (int): The maximum x value.
         """
-
         if self._move_timer == 0:
             # reset move timer
             self._move_timer = self._move_wait
-            # determine movement (wrap x)
-            x = (self._position.get_x() + self._velocity.get_x()) % constants.MAX_X
-            y = (self._position.get_y() + self._velocity.get_y())
 
-            # if asteroid goes off screen
-            if y >= constants.MAX_Y:
+            # if asteroid is off screen
+            if self._position.get_y() >= constants.MAX_Y + constants.CELL_SIZE * 5:
                 # delete it
                 self._cast.remove_actor("asteroids", self)
             else:
-                # apply movement
-                self._position = Point(x, y)
+                # apply movement to all parts
+                for part in self._parts:
+                    x = (part._position.get_x() +
+                         self._velocity.get_x()) % constants.MAX_X
+                    y = (part._position.get_y() + self._velocity.get_y())
+                    # move part
+                    part._position = Point(x, y)
+
         else:
             # waiting a few frames before moving again
             self._move_timer -= 1
