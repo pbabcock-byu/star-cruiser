@@ -46,7 +46,7 @@ class Asteroid(Actor):
             self._move_timer = 0
 
         if self._type == "LRG":
-            self._move_wait = random.choice([4, 5])
+            self._move_wait = 4
             self._move_timer = 0
 
     def move_next(self):
