@@ -114,7 +114,7 @@ class HandleCollisionsAction(Action):
 
             message = Actor()
             message.set_text(
-                f"Game Over!\n {self._who_won.capitalize()} player won the game.\n\n Press 'Y' to play again! ")
+                f"Game Over!\n\n Press ENTER to play again! ")
             message.set_position(position)
             cast.add_actor("messages", message)
 
@@ -134,5 +134,7 @@ class HandleCollisionsAction(Action):
 
             # delete the ship parts
             ship.remove_parts()
+            ship.set_is_hurt(True)
+
             # delete all enemies
             cast.remove_actors("asteroids")

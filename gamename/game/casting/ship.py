@@ -17,6 +17,13 @@ class Ship(Actor):
         super().__init__()
         self._parts = []
         self._prepare_shape()
+        self._is_hurt = False
+
+    def get_is_hurt(self):
+        return self._is_hurt
+
+    def set_is_hurt(self, is_hurt):
+        self._is_dead = is_hurt
 
     def get_parts(self):
         return self._parts

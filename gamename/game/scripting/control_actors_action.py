@@ -50,32 +50,35 @@ class ControlActorsAction(Action):
             cast (Cast): The cast of Actors in the game.
         """
         ship = cast.get_first_actor("ships")
-        # if player presses the space bar
-        if self._keyboard_service.is_key_down('space') and self._key_fire == False:
 
-            # set key fire so only one bullet is fired at a time
-            self._key_fire = True
-            # set timer to control how rapidly player can fire
-            self._key_fire_timer = 6
+        # make sure player is not in hurt mode
+        if ship.get_is_hurt() == False:
+            # if player presses the space bar
+            if self._keyboard_service.is_key_down('space') and self._key_fire == False:
 
-            # get the position of the front of the ship
-            ship_parts = ship.get_parts()
-            ship_position = ship_parts[0].get_position()
-            # create a point one cell above the front of the ship
-            position = Point(ship_position.get_x(),
-                             ship_position.get_y() - 1 * constants.CELL_SIZE)
-            # set a velocity to move upward
-            velocity = Point(0, -constants.CELL_SIZE)
-            text = "^"
-            color = constants.GREEN
-            # apply attributes to a new instance of laser
-            laser = Laser(cast)
-            laser.set_position(position)
-            laser.set_velocity(velocity)
-            laser.set_text(text)
-            laser.set_color(color)
-            # add laser to the "lasers" cast
-            cast.add_actor("lasers", laser)
+                # set key fire so only one bullet is fired at a time
+                self._key_fire = True
+                # set timer to control how rapidly player can fire
+                self._key_fire_timer = 6
+
+                # get the position of the front of the ship
+                ship_parts = ship.get_parts()
+                ship_position = ship_parts[0].get_position()
+                # create a point one cell above the front of the ship
+                position = Point(ship_position.get_x(),
+                                 ship_position.get_y() - 1 * constants.CELL_SIZE)
+                # set a velocity to move upward
+                velocity = Point(0, -constants.CELL_SIZE)
+                text = "^"
+                color = constants.GREEN
+                # apply attributes to a new instance of laser
+                laser = Laser(cast)
+                laser.set_position(position)
+                laser.set_velocity(velocity)
+                laser.set_text(text)
+                laser.set_color(color)
+                # add laser to the "lasers" cast
+                cast.add_actor("lasers", laser)
 
         # handle rapid fire timer and key hold
         if self._key_fire == True:
