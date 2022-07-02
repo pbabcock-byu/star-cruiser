@@ -36,7 +36,7 @@ class HandleEnemyCreation(Action):
                 "starttime": 3,
                 "endtime": 18,
                 "enemytypes": ["asteroid-small"],
-                "waitspawn": 5,
+                "waitspawn": 3,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
@@ -44,7 +44,7 @@ class HandleEnemyCreation(Action):
                 "starttime": 20,
                 "endtime": 35,
                 "enemytypes": ["asteroid-medium"],
-                "waitspawn": 3,
+                "waitspawn": 2,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
@@ -52,7 +52,7 @@ class HandleEnemyCreation(Action):
                 "starttime": 37,
                 "endtime": 55,
                 "enemytypes": ["asteroid-large", "asteroid-large"],
-                "waitspawn": 8,
+                "waitspawn": 5,
                 "randomocity": 8,
                 "stagedisplay": "none"
             },
@@ -117,7 +117,7 @@ class HandleEnemyCreation(Action):
             {
                 "starttime": 139,
                 "endtime": 140,
-                "stagedisplay": "You beat the game! (so far)"
+                "stagedisplay": "YOU BEAT THE GAME! (so far)"
             },
         ]
 

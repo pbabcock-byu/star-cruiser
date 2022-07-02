@@ -54,6 +54,19 @@ class Asteroid(Actor):
                 explosion.set_animate_speed(0.3 + random.random()*0.7)
                 # add explosion to "explosions" cast group
                 self._cast.add_actor("explosions", explosion)
+
+            # if we are a giant asteroid, generate some huge ones when we are broken:
+            if self.get_type() == "GIANT":
+                for i in range(0, 2):
+                    this = self._create_asteroid_when_destroyed(4)
+                    self._cast.add_actor("asteroids", this)
+
+            # if we are a giant asteroid, generate some huge ones when we are broken:
+            if self.get_type() == "HUGE":
+                for i in range(0, 3):
+                    this = self._create_asteroid_when_destroyed(2)
+                    self._cast.add_actor("asteroids", this)
+
             # remove ourselves
             self._cast.remove_actor("asteroids", self)
 
@@ -122,6 +135,29 @@ class Asteroid(Actor):
         # generate parts list from layout
         self._parts = self._generate_structure(
             origin, self._velocity, asteroid_layout, asteroid_colors)
+        # add self to parts list
+        self._parts.append(self)
+
+    def _create_asteroid_when_destroyed(self, asteroidtype):
+        """
+        Creates the structure of actors to form a huge asteroid
+        self._parts
+        """
+        x = self._position.get_x() + random.randint(-1, 1) * constants.CELL_SIZE
+        y = self._position.get_y() + random.randint(-1, 0) * constants.CELL_SIZE
+        position = Point(x, y)
+
+        velocity = Point(random.randint(-1, 1) *
+                         constants.CELL_SIZE, 1 * constants.CELL_SIZE)
+        type = constants.ASTEROID_TYPES[asteroidtype]
+        asteroid = Asteroid(self._cast, type[0])
+        asteroid.set_text(type[1])
+        asteroid.set_color(constants.BROWN)
+        asteroid.set_position(position)
+        asteroid.set_velocity(velocity)
+        asteroid.set_up_parts()
+        # returns it so we can add it to the cast "asteriods" group
+        return asteroid
 
     def move_next(self):
         """ (OVERRIDE) Moves the actor to its next position according to its velocity. Will wrap the position 

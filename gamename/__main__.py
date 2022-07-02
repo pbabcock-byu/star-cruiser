@@ -27,8 +27,8 @@ def main():
     # create display elements
     scores = Score()
     shields = Shields()
-    scores.set_color(constants.WHITE)
-    shields.set_color(constants.WHITE)
+    scores.set_color(constants.BLACK)
+    shields.set_color(constants.BLACK)
     cast.add_actor("scores", scores)
     cast.add_actor("shields", shields)
 
