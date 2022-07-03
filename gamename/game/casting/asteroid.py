@@ -4,6 +4,7 @@ import random
 from game.casting.actor import Actor
 from game.shared.point import Point
 from game.casting.explosion import Explosion
+from game.scripting.action import Action
 
 
 class Asteroid(Actor):
@@ -39,10 +40,12 @@ class Asteroid(Actor):
     def get_health(self):
         return self._health
 
-    def remove_health(self, amount):
+    def remove_health(self, cast, amount):
         self._health -= amount
         # check to see if we are out of health
         if self._health <= 0:
+            scoreboard = cast.get_first_actor("scores")
+            scoreboard.add_points(1)
             for part in self._parts:
                 # create an explosion at the parts position
                 explosion = Explosion(self._cast)
@@ -68,6 +71,7 @@ class Asteroid(Actor):
                     self._cast.add_actor("asteroids", this)
 
             # remove ourselves
+
             self._cast.remove_actor("asteroids", self)
 
     def set_up_parts(self):

@@ -88,11 +88,12 @@ class HandleCollisionsAction(Action):
                             cast.add_actor("explosions", explosion)
 
                             # apply damage from laser to enemy health
-                            enemy.remove_health(laser.get_damage())
+                            enemy.remove_health(cast, laser.get_damage())
                             # delete the laser
                             cast.remove_actor("lasers", laser)
                             # break all loops
                             hit = True
+
                             break
 
     def _handle_player_enemy_collision(self, cast, groups):
