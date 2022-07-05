@@ -40,11 +40,12 @@ class Asteroid(Actor):
     def get_health(self):
         return self._health
 
-    def remove_health(self, cast, amount):
+    def remove_health(self, amount):
         self._health -= amount
         # check to see if we are out of health
         if self._health <= 0:
-            scoreboard = cast.get_first_actor("scores")
+            scoreboard = self._cast.get_first_actor("scores")
+
             if self._type == "HUGE":
                 scoreboard.add_points(constants.ASTEROIDSHUGE_KILL)
             elif self._type == "GIANT":
@@ -118,6 +119,11 @@ class Asteroid(Actor):
 
         if self._type == "LRG":
             self._move_wait = 4
+
+        if self._type == "SML-xmove":
+            # cause us to move horizontally
+            self._velocity = Point(random.choice(
+                [-constants.CELL_SIZE, constants.CELL_SIZE]), constants.CELL_SIZE)
 
         if self._type in ["HUGE", "GIANT"]:
             # this astroid is structure of multiple actors
