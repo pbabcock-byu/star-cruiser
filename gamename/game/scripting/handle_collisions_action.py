@@ -38,6 +38,7 @@ class HandleCollisionsAction(Action):
             # self._handle_snakes_collision(cast)
             self._handle_laser_enemy_collision(cast, ["asteroids"])
             self._handle_player_enemy_collision(cast, ["asteroids"])
+            self._handle_player_upgrade_collision(cast)
 
             self._handle_game_over(cast)
         else:
@@ -164,3 +165,15 @@ class HandleCollisionsAction(Action):
 
             # delete all enemies
             cast.remove_actors("asteroids")
+
+    def _handle_player_upgrade_collision(self, cast):
+        ship = cast.get_first_actor("ships")
+        parts = ship.get_parts()
+        upgrades = cast.get_actors("upgrades")
+        for upgrade in upgrades:
+            for part in parts:
+                if part.get_position().equals(upgrade.get_position()):
+                    shields = cast.get_first_actor("shields")
+                    shields.add_points(10)
+                    cast.remove_actor("upgrades", upgrade)
+

@@ -46,6 +46,7 @@ class DrawActorsAction(Action):
         explosions = cast.get_actors("explosions")
         # get sparks
         sparks = cast.get_actors("sparks")
+        upgrades = cast.get_actors("upgrades")
 
         # DRAW ACTORS - - - - - - -
         self._video_service.clear_buffer()
@@ -63,5 +64,6 @@ class DrawActorsAction(Action):
         self._video_service.draw_actors(explosions)
         # draw explosions
         self._video_service.draw_actors(sparks)
-
+        self._video_service.draw_actors(upgrades)
+        
         self._video_service.flush_buffer()

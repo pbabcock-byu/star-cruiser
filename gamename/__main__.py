@@ -25,7 +25,7 @@ def main():
     # create player ship
     cast.add_actor("ships", Ship())
     # create display elements
-    scores = Score()
+    scores = Score(cast)
     shields = Shields()
     scores.set_color(constants.BLACK)
     shields.set_color(constants.BLACK)
