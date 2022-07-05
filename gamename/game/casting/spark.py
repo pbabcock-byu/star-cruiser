@@ -1,4 +1,4 @@
-from math import cos, sin
+from math import cos, sin, radians
 import constants
 from game.casting.actor import Actor
 from game.shared.point import Point
@@ -22,13 +22,13 @@ class Spark(Actor):
         self._bright = 255
         self._dim_speed = random.choice([5, 8, 12])
         self._speed = 10
-        self._direction = random.random()*360
+        self._direction = radians(random.random()*360)
 
     def set_speed(self, speed):
         self._speed = speed
 
     def set_direction(self, direction):
-        self._direction = direction
+        self._direction = radians(direction)
 
     def move_next(self):
         """ (OVERRIDE) moves sparks and destroys when outside window

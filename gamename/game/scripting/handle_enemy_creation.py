@@ -30,15 +30,15 @@ class HandleEnemyCreation(Action):
         self._current_stage = -1
         self._game_stages = [
             {
-                "delaystart": 1,
-                "duration": 2,
+                "delaystart": 0,
+                "duration": 1,
                 "stagedisplay": "Stage One"
             },
             {
-                "delaystart": 1,
+                "delaystart": 0,
                 "duration": 15,
-                "enemytypes": ["asteroid-giant"],
-                "waitspawn": 3,
+                "enemytypes": ["asteroid-small"],
+                "waitspawn": 0.3,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },

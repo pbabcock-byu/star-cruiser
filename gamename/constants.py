@@ -24,6 +24,7 @@ GREEN = Color(0, 255, 0)
 BROWN = Color(165, 42, 42)
 BLUE = Color(5, 90, 255)
 ORANGE = Color(255, 190, 0)
+AQUA = Color(100, 255, 255)
 
 # Ship shields and damage
 STARTSHEILDS = 20
@@ -36,6 +37,10 @@ SHIPSEXPLOSION_SOUND = ""
 LOWSHIELDSWARNING_SOUND = ""
 GAMEOVER_SOUND = ""
 
+# Ship Layout
+SHIP_LAYOUT = [["+", 0, 0, 0], ["A", 0, 1, 0], ["H", 0, 2, 1], [
+    "=", -1, 2, 0], ["=", 1, 2, 0], ["_", -2, 2, 0], ["_", 2, 2, 0], ['*', 0, 3, 2]]
+SHIP_COLORS = [BLUE, WHITE, RED]
 
 # ASTEROID ATTRIBUTES - - - - - - - - - - - - - - - -
 

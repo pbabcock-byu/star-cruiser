@@ -15,6 +15,9 @@ class Shields(Actor):
         self.add_points(0)
         self.set_position(
             Point(constants.CELL_SIZE * 28, constants.CELL_SIZE * 2))
+        self._flash_timer = 0
+        self._wait_flash = 0
+        self._color_toggle = 0
 
     def add_points(self, points):
         """Adds or removes points from the shield.
@@ -24,3 +27,27 @@ class Shields(Actor):
         """
         self._points += points
         self.set_text(f"Shields Remaining: {self._points}")
+
+        if points < 0:
+            self._flash_timer = 15
+
+    def get_points(self):
+        """Returns the value of self._points"""
+        return self._points
+
+    def move_next(self):
+
+        if self._flash_timer > 0:
+            self._flash_timer -= 1
+            self._wait_flash -= 1
+            if self._wait_flash <= 0:
+                self._wait_flash = 2
+                if(self._color_toggle == 0):
+                    self._color_toggle = 1
+                    self.set_color(constants.RED)
+                else:
+                    self._color_toggle = 0
+                    self.set_color(constants.WHITE)
+
+        else:
+            self.set_color(constants.WHITE)

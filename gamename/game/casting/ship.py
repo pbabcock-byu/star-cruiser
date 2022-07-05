@@ -18,12 +18,26 @@ class Ship(Actor):
         self._parts = []
         self._prepare_ship()
         self._is_hurt = False
+        self._is_hurt_timer = 0
+        self._is_dead = False
 
     def get_is_hurt(self):
         return self._is_hurt
 
+    def get_is_dead(self):
+        return self._is_dead
+
+    def set_is_dead(self, is_dead):
+        self._is_dead = is_dead
+        self._is_hurt = False
+
     def set_is_hurt(self, is_hurt):
         self._is_hurt = is_hurt
+        if is_hurt == True:
+            self._is_hurt_timer = 10
+            # set ship color to red
+            for part in self._parts[:-1]:
+                part.set_color(constants.AQUA)
 
     def get_parts(self):
         return self._parts
@@ -33,6 +47,7 @@ class Ship(Actor):
 
     def reset_ship(self):
         self._is_hurt = False
+        self._is_dead = False
         self._prepare_ship()
 
     def move_next(self):
@@ -49,7 +64,21 @@ class Ship(Actor):
                 self._parts[7].set_text('*')
                 self._parts[7].set_color(constants.RED)
 
+        # is hurt timer
+        if self._is_hurt_timer > 0:
+            self._is_hurt_timer -= 1
+        else:
+            if self.get_is_hurt() == True:
+                self._is_hurt = False
+                # reset ship color
+                for idx, part in enumerate(self._parts):
+                    part.set_color(
+                        constants.SHIP_COLORS[constants.SHIP_LAYOUT[idx][3]])
+
     def control_ship(self, velocity):
+        # set our velocity
+        self.set_velocity(velocity)
+        # set velocity of all ship parts
         for part in self._parts:
             part.set_velocity(velocity)
 
@@ -61,10 +90,7 @@ class Ship(Actor):
         # set origin position
         x = int(constants.MAX_X * 0.5)
         y = int(constants.MAX_Y - constants.CELL_SIZE * 8)
-        # set ship layout
-        ship_layout = [["+", 0, 0, 0], ["A", 0, 1, 0], ["H", 0, 2, 1], [
-            "=", -1, 2, 0], ["=", 1, 2, 0], ["_", -2, 2, 0], ["_", 2, 2, 0], ['*', 0, 3, 2]]
-        ship_colors = [constants.BLUE, constants.WHITE, constants.RED]
+
         # generate parts list based on layout
         self._parts = self._generate_structure(
-            Point(x, y), Point(0, 0), ship_layout, ship_colors)
+            Point(x, y), Point(0, 0), constants.SHIP_LAYOUT, constants.SHIP_COLORS)

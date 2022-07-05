@@ -105,16 +105,47 @@ class HandleCollisionsAction(Action):
         """
         ship = cast.get_first_actor("ships")
 
-        parts = ship.get_parts()
-        # loop through every part
-        for part in parts:
-            for group in groups:
-                # loop through every enemy in this group
-                for enemy in cast.get_actors(group):
-                    for enemypart in enemy._parts:
-                        if part.get_position().equals(enemypart.get_position()):
-                            # if head collides with any, game over
-                            self._is_game_over = True
+        # make sure we are not on our hurt timer
+        if ship.get_is_hurt() == False:
+            # then, check for collisions
+            parts = ship.get_parts()
+            # loop through every part
+            for part in parts:
+                for group in groups:
+                    # loop through every enemy in this group
+                    for enemy in cast.get_actors(group):
+                        for enemypart in enemy._parts:
+                            if part.get_position().equals(enemypart.get_position()):
+
+                                # if any player part collides with any enemy part
+                                # get reference to shields instance
+                                shields = cast.get_first_actor("shields")
+
+                                # ( CODE FOR APPLYING DAMAGE TO SHIELDS HERE )
+                                shields.add_points(-4)
+
+                                # create sparks that bounce off player ship
+                                self._create_sparks(
+                                    cast, 20, part.get_position(), 5, 13, 270, 40)
+                                # if player is moving sideways
+                                if ship.get_velocity().get_x() > 0:
+                                    self._create_sparks(
+                                        cast, 20, part.get_position(), 10, 23, 350, 40)
+                                if ship.get_velocity().get_x() < 0:
+                                    self._create_sparks(
+                                        cast, 20, part.get_position(), 10, 23, 190, 40)
+
+                                # remove all the enemies health
+                                enemy.remove_health(100)
+
+                                # if we have less than 0 shields now
+                                if shields.get_points() < 0:
+                                    # explode player, game over
+                                    self._is_game_over = True
+                                    ship.set_is_dead(True)
+                                else:
+                                    # set ship is hurt to true
+                                    ship.set_is_hurt(True)
 
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.
@@ -124,44 +155,29 @@ class HandleCollisionsAction(Action):
         """
         if self._is_game_over:
 
+            # get center screen position
             x = int(constants.MAX_X / 2)
             y = int(constants.MAX_Y / 2)
             position = Point(x, y)
-
+            # create a game over message at that position
             message = Actor()
             message.set_text(
                 f"Game Over!\n\n Press ENTER to play again! ")
             message.set_position(position)
             cast.add_actor("messages", message)
 
+            # get ship
             ship = cast.get_first_actor("ships")
             parts = ship.get_parts()
             # loop through every part
             for part in parts:
-                # create an explosion at the parts position
-                explosion = Explosion(cast)
-                explosion.set_text(".")
-                explosion.set_color(constants.WHITE)
-                explosion.set_velocity(Point(0, 1))
-                explosion.set_position(part.get_position())
-                explosion.set_animate_speed(0.1 + random.random()*0.8)
-                # add explosion to "explosions" cast group
-                cast.add_actor("explosions", explosion)
-
-                for i in range(0, 3):
-                    # create some sparks at our location
-                    spark = Spark(cast)
-                    spark.set_text(".")
-                    spark.set_color(constants.WHITE)
-                    spark.set_speed(random.choice([5, 8, 9, 10, ]))
-                    spark.set_direction(random.random()*360)
-                    spark.set_position(part.get_position())
-                    # add explosion to "explosions" cast group
-                    cast.add_actor("sparks", spark)
+                # make sparks and explosion there
+                self._create_explosion(cast, part.get_position())
+                self._create_sparks(
+                    cast, 3, part.get_position(), 5, 13, 0, 360)
 
             # delete the ship parts
             ship.remove_parts()
-            ship.set_is_hurt(True)
 
             # delete all enemies
             cast.remove_actors("asteroids")
@@ -177,3 +193,28 @@ class HandleCollisionsAction(Action):
                     shields.add_points(10)
                     cast.remove_actor("upgrades", upgrade)
 
+    def _create_sparks(self, cast, amount, position, speed_min, speed_max, dir, dir_range):
+        """"Create a certain number of sparks at a certain location between min/max speed and min/max direction"""
+        for i in range(0, amount):
+            # create some sparks at our location
+            spark = Spark(cast)
+            spark.set_text(".")
+            spark.set_color(constants.WHITE)
+            spark.set_speed(speed_min + random.random()
+                            * (speed_max-speed_min))
+            spark.set_direction(dir + (random.random()-0.5)*dir_range)
+            spark.set_position(position)
+            # add explosion to "explosions" cast group
+            cast.add_actor("sparks", spark)
+
+    def _create_explosion(self, cast, position):
+        """"Create an explosion at location"""
+        # create an explosion at the parts position
+        explosion = Explosion(cast)
+        explosion.set_text(".")
+        explosion.set_color(constants.WHITE)
+        explosion.set_velocity(Point(0, 1))
+        explosion.set_position(position)
+        explosion.set_animate_speed(0.1 + random.random()*0.8)
+        # add explosion to "explosions" cast group
+        cast.add_actor("explosions", explosion)

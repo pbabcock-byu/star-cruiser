@@ -52,7 +52,7 @@ class ControlActorsAction(Action):
         ship = cast.get_first_actor("ships")
 
         # make sure player is not in hurt mode
-        if ship.get_is_hurt() == False:
+        if ship.get_is_dead() == False and ship.get_is_hurt() == False:
             # if player presses the space bar
             if self._keyboard_service.is_key_down('space') and self._key_fire == False:
 
