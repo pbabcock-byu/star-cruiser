@@ -42,9 +42,10 @@ class DrawActorsAction(Action):
         for asteroid in asteroids:
             for part in asteroid.get_parts():
                 asteroid_parts.append(part)
-
         # get explosions
         explosions = cast.get_actors("explosions")
+        # get sparks
+        sparks = cast.get_actors("sparks")
 
         # DRAW ACTORS - - - - - - -
         self._video_service.clear_buffer()
@@ -58,8 +59,9 @@ class DrawActorsAction(Action):
         self._video_service.draw_actors(lasers)
         # draw asteroids
         self._video_service.draw_actors(asteroid_parts)
-
         # draw explosions
         self._video_service.draw_actors(explosions)
+        # draw explosions
+        self._video_service.draw_actors(sparks)
 
         self._video_service.flush_buffer()

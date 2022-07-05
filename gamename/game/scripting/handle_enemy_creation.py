@@ -35,7 +35,7 @@ class HandleEnemyCreation(Action):
             {
                 "starttime": 3,
                 "endtime": 18,
-                "enemytypes": ["asteroid-small"],
+                "enemytypes": ["asteroid-giant"],
                 "waitspawn": 3,
                 "randomocity": 5,
                 "stagedisplay": "none"

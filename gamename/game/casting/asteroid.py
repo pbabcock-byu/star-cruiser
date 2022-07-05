@@ -4,6 +4,7 @@ import random
 from game.casting.actor import Actor
 from game.shared.point import Point
 from game.casting.explosion import Explosion
+from game.casting.spark import Spark
 
 
 class Asteroid(Actor):
@@ -54,6 +55,17 @@ class Asteroid(Actor):
                 explosion.set_animate_speed(0.3 + random.random()*0.7)
                 # add explosion to "explosions" cast group
                 self._cast.add_actor("explosions", explosion)
+
+                for i in range(0, 3):
+                    # create some sparks at our location
+                    spark = Spark(self._cast)
+                    spark.set_text(".")
+                    spark.set_color(constants.WHITE)
+                    spark.set_speed(random.choice([5, 8, 9, 10, ]))
+                    spark.set_direction(random.random()*360)
+                    spark.set_position(part.get_position())
+                    # add explosion to "explosions" cast group
+                    self._cast.add_actor("sparks", spark)
 
             # if we are a giant asteroid, generate some huge ones when we are broken:
             if self.get_type() == "GIANT":
