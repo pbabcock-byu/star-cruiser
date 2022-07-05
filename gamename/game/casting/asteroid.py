@@ -40,10 +40,28 @@ class Asteroid(Actor):
     def get_health(self):
         return self._health
 
-    def remove_health(self, amount):
+    def remove_health(self, cast, amount):
         self._health -= amount
         # check to see if we are out of health
         if self._health <= 0:
+            scoreboard = cast.get_first_actor("scores")
+            if self._type == "HUGE":
+                scoreboard.add_points(constants.ASTEROIDSHUGE_KILL)
+            elif self._type == "GIANT":
+                scoreboard.add_points(constants.ASTEROIDSGIANT_KILL)
+            elif self._type == "LRG":
+                scoreboard.add_points(constants.ASTEROIDSLRG_KILL)
+            elif self._type == "SML-xmove":
+                scoreboard.add_points(constants.ASTEROIDSSML_xmove_KILL)
+            elif self._type == "MED":
+                scoreboard.add_points(constants.ASTEROIDSMED_KILL)
+            elif self._type == "SML":
+                scoreboard.add_points(constants.ASTEROIDSSML_KILL)
+
+            else:
+                scoreboard.add_points(0)
+
+                scoreboard.add_points(1)
             for part in self._parts:
                 # create an explosion at the parts position
                 explosion = Explosion(self._cast)
@@ -80,6 +98,7 @@ class Asteroid(Actor):
                     self._cast.add_actor("asteroids", this)
 
             # remove ourselves
+
             self._cast.remove_actor("asteroids", self)
 
     def set_up_parts(self):
