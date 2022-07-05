@@ -32,6 +32,7 @@ class Ship(Actor):
         self._parts.clear()
 
     def reset_ship(self):
+        self._is_hurt = False
         self._prepare_ship()
 
     def move_next(self):

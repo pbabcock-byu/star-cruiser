@@ -29,9 +29,64 @@ ORANGE = Color(255, 190, 0)
 STARTSHEILDS = 20
 LOWSHIELDS = 5
 
-# Asteroid attributes
+# Sound
+SHIPFIRE_SOUND = ""
+ASTEROIDSEXPLOSION_SOUND = ""
+SHIPSEXPLOSION_SOUND = ""
+LOWSHIELDSWARNING_SOUND = ""
+GAMEOVER_SOUND = ""
+
+
+# ASTEROID ATTRIBUTES - - - - - - - - - - - - - - - -
+
+ASTEROID_TYPES_LIST = [
+    {
+        "name": "SML",
+        "text": "`",
+        "damage": 1,
+        "health": 1,
+        "points": 1
+    },
+    {
+        "name": "MED",
+        "text": "*",
+        "damage": 2,
+        "health": 1,
+        "points": 1
+    },
+    {
+        "name": "LRG",
+        "text": "@",
+        "damage": 2,
+        "health": 2,
+        "points": 2
+    },
+    {
+        "name": "SML-xmove",
+        "text": "°",
+        "damage": 2,
+        "health": 1,
+        "points": 3
+    },
+    {
+        "name": "HUGE",
+        "text": "@",
+        "damage": 4,
+        "health": 3,
+        "points": 4
+    },
+    {
+        "name": "GIANT",
+        "text": "@",
+        "damage": 6,
+        "health": 5,
+        "points": 6
+    }]
+
+
 ASTEROID_TYPES = [["SML", "`"], ["MED", "*"],
                   ["LRG", "@"], ["SML-xmove", "."], ["HUGE", "@"], ["GIANT", "☐"]]
+
 ASTEROIDSLRG_DAMAGE = 3
 ASTEROIDSMED_DAMAGE = 2
 ASTEROIDSSML_DAMAGE = 1
@@ -52,10 +107,4 @@ ASTEROIDSSML_xmove_KILL = 3
 ASTEROIDSLRG_KILL = 2
 ASTEROIDSMED_KILL = 1
 ASTEROIDSSML_KILL = 1
-
-# Sound
-SHIPFIRE_SOUND = ""
-ASTEROIDSEXPLOSION_SOUND = ""
-SHIPSEXPLOSION_SOUND = ""
-LOWSHIELDSWARNING_SOUND = ""
-GAMEOVER_SOUND = ""
+# end asteroid atts. - - - - - - - - - - - - - - - - - -

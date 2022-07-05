@@ -4,6 +4,7 @@ from game.casting.actor import Actor
 from game.scripting.action import Action
 from game.shared.point import Point
 from game.casting.explosion import Explosion
+from game.casting.spark import Spark
 
 
 class HandleCollisionsAction(Action):
@@ -145,6 +146,17 @@ class HandleCollisionsAction(Action):
                 explosion.set_animate_speed(0.1 + random.random()*0.8)
                 # add explosion to "explosions" cast group
                 cast.add_actor("explosions", explosion)
+
+                for i in range(0, 3):
+                    # create some sparks at our location
+                    spark = Spark(cast)
+                    spark.set_text(".")
+                    spark.set_color(constants.WHITE)
+                    spark.set_speed(random.choice([5, 8, 9, 10, ]))
+                    spark.set_direction(random.random()*360)
+                    spark.set_position(part.get_position())
+                    # add explosion to "explosions" cast group
+                    cast.add_actor("sparks", spark)
 
             # delete the ship parts
             ship.remove_parts()

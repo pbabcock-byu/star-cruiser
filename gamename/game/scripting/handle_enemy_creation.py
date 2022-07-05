@@ -22,101 +22,103 @@ class HandleEnemyCreation(Action):
     def __init__(self):
         """Constructs a new HandleEnemyCreation."""
         self._is_game_over = False
-        self._game_seconds = 0
         self._wait_spawn = 0
         self._game_stage = ""
+        self._game_stage_number = 0
+        self._stage_seconds = 0
         self._randomocity = 0
+        self._current_stage = -1
         self._game_stages = [
             {
-                "starttime": 1,
-                "endtime": 2,
+                "delaystart": 1,
+                "duration": 2,
                 "stagedisplay": "Stage One"
             },
             {
-                "starttime": 3,
-                "endtime": 18,
+                "delaystart": 1,
+                "duration": 15,
                 "enemytypes": ["asteroid-giant"],
                 "waitspawn": 3,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 20,
-                "endtime": 35,
+                "delaystart": 2,
+                "duration": 15,
                 "enemytypes": ["asteroid-medium"],
                 "waitspawn": 2,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 37,
-                "endtime": 55,
+                "delaystart": 2,
+                "duration": 18,
                 "enemytypes": ["asteroid-large", "asteroid-large"],
                 "waitspawn": 5,
                 "randomocity": 8,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 56,
-                "endtime": 57,
+                "delaystart": 1,
+                "duration": 2,
                 "stagedisplay": "Stage Two"
             },
             {
-                "starttime": 58,
-                "endtime": 64,
+                "delaystart": 1,
+                "duration": 6,
                 "enemytypes": ["asteroid-small-xmove", "asteroid-small"],
                 "waitspawn": 2,
                 "randomocity": 2,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 72,
-                "endtime": 76,
+                "delaystart": 8,
+                "duration": 5,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
                 "waitspawn": 2,
                 "randomocity": 0,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 90,
-                "endtime": 95,
+                "delaystart": 14,
+                "duration": 6,
                 "enemytypes": ["asteroid-small", "asteroid-small", "asteroid-small"],
                 "waitspawn": 0.2,
                 "randomocity": 2,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 96,
-                "endtime": 97,
+                "delaystart": 1,
+                "duration": 2,
                 "stagedisplay": "Stage Three"
             },
             {
-                "starttime": 98,
-                "endtime": 103,
+                "delaystart": 1,
+                "duration": 6,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
                 "waitspawn": 1,
                 "randomocity": 10,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 108,
-                "endtime": 120,
+                "delaystart": 5,
+                "duration": 12,
                 "enemytypes": ["asteroid-huge"],
                 "waitspawn": 1,
                 "randomocity": 4,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 128,
-                "endtime": 138,
+                "delaystart": 8,
+                "duration": 10,
                 "enemytypes": ["asteroid-giant"],
                 "waitspawn": 2,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
             {
-                "starttime": 139,
-                "endtime": 140,
+                "delaystart": 1,
+                "duration": 2,
                 "stagedisplay": "YOU BEAT THE GAME! (so far)"
             },
         ]
@@ -168,63 +170,64 @@ class HandleEnemyCreation(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
-        # reset
-        current_stage = "no stage"
 
-        # determine stage
-        for stage in self._game_stages:
-            # check to see if the _game_seconds is within this stages start/end time
-            if self._game_seconds >= stage["starttime"] and self._game_seconds <= stage["endtime"]:
-                # if so, it is the current stage
-                current_stage = stage
+        # update stage info if it's a new stage
+        if self._current_stage != self._game_stages[self._game_stage_number]:
+            self._current_stage = self._game_stages[self._game_stage_number]
+            # reset stage timer
+            self._stage_seconds = 0
 
-        if current_stage != "no stage":
-            # if this is not a "stage display" stage
-            if current_stage["stagedisplay"] == "none":
+        # if this is not a "stage display" stage
+        if self._current_stage["stagedisplay"] == "none":
 
-                # increment game timer
-                self._game_seconds += 1 / constants.FRAME_RATE
+            # increment game timer
+            self._stage_seconds += 1 / constants.FRAME_RATE
+            # wait the delay time
+            if self._stage_seconds > self._current_stage["delaystart"]:
 
+                # create enemies every time the wait spawn is zero
                 # if the wait spawn timer is over
                 if self._wait_spawn <= 0:
                     # reset to wait again
-                    self._wait_spawn = current_stage["waitspawn"]
+                    self._wait_spawn = self._current_stage["waitspawn"]
                     # set up randomocity for spawn y positions
-                    self._randomocity = current_stage["randomocity"]
+                    self._randomocity = self._current_stage["randomocity"]
                     # for every enemy in the enemytypes list for this stage
-                    for enemytype in current_stage["enemytypes"]:
+                    for enemytype in self._current_stage["enemytypes"]:
                         # create an enemy
                         self._create_enemy_of_type(cast, enemytype)
-                        print(enemytype)
                 else:
                     # count down timer in seconds
                     self._wait_spawn -= 1 / constants.FRAME_RATE
 
-                # update _game_stage
-                if self._game_stage != current_stage["stagedisplay"]:
-                    self._game_stage = current_stage["stagedisplay"]
-                    # delete the game stage display message
-                    cast.remove_actor(
-                        "messages", cast.get_first_actor("messages"))
-                    # reset other display color to show
-                    display_elements = cast.get_actors("scores")
-                    for display in display_elements:
-                        display.set_color(constants.WHITE)
-                    display_elements = cast.get_actors("shields")
-                    for display in display_elements:
-                        display.set_color(constants.WHITE)
+            # update _game_stage
+            if self._game_stage != self._current_stage["stagedisplay"]:
+                self._game_stage = self._current_stage["stagedisplay"]
+                # delete the game stage display message
+                cast.remove_actor(
+                    "messages", cast.get_first_actor("messages"))
+                # reset other display color to show
+                display_elements = cast.get_actors("scores")
+                for display in display_elements:
+                    display.set_color(constants.WHITE)
+                display_elements = cast.get_actors("shields")
+                for display in display_elements:
+                    display.set_color(constants.WHITE)
 
-            else:
-                # reset
-                self._wait_spawn = 0
+        else:
+            # reset
+            self._wait_spawn = 0
 
-                # update _game_stage
-                if self._no_enemies_exist(cast):
-                    # increment game timer
-                    self._game_seconds += 1 / constants.FRAME_RATE
+            # update _game_stage
+            if self._no_enemies_exist(cast):
 
-                    if self._game_stage != current_stage["stagedisplay"]:
-                        self._game_stage = current_stage["stagedisplay"]
+                # increment stage timer
+                self._stage_seconds += 1 / constants.FRAME_RATE
+                # after delaystart
+                if self._stage_seconds > self._current_stage["delaystart"]:
+                    # display stage message
+                    if self._game_stage != self._current_stage["stagedisplay"]:
+                        self._game_stage = self._current_stage["stagedisplay"]
                         # hide current display elements
                         display_elements = cast.get_actors("scores")
                         for display in display_elements:
@@ -240,9 +243,12 @@ class HandleEnemyCreation(Action):
                         message.set_text(self._game_stage)
                         message.set_position(position)
                         cast.add_actor("messages", message)
-        else:
-            # increment game timer
-            self._game_seconds += 1 / constants.FRAME_RATE
+        # if we are past the duration of this stage
+        if self._stage_seconds > self._current_stage["delaystart"] + self._current_stage["duration"]:
+            # reset stage timer
+            self._stage_seconds = 0
+            # move to next stage
+            self._game_stage_number += 1
 
     def _no_enemies_exist(self, cast):
         """Determines whether there are no enemies still on screen
@@ -260,7 +266,6 @@ class HandleEnemyCreation(Action):
 
     def _make_asteriod(self, cast, asteroidtype):
         """Creates a new asteroid at the top of the screen
-
         Returns:
             reference to the new meteoroid
         """
@@ -271,13 +276,9 @@ class HandleEnemyCreation(Action):
         position = Point(x, y)
         position = position.scale(constants.CELL_SIZE)
         velocity = Point(0, constants.CELL_SIZE)
-        if asteroidtype == 3:
-            velocity = Point(random.choice(
-                [-constants.CELL_SIZE, constants.CELL_SIZE]), constants.CELL_SIZE)
-
-        type = constants.ASTEROID_TYPES[asteroidtype]
-        asteroid = Asteroid(cast, type[0])
-        asteroid.set_text(type[1])
+        type = constants.ASTEROID_TYPES_LIST[asteroidtype]
+        asteroid = Asteroid(cast, type["name"])
+        asteroid.set_text(type["text"])
         asteroid.set_color(constants.BROWN)
         asteroid.set_position(position)
         asteroid.set_velocity(velocity)
