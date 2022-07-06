@@ -18,12 +18,14 @@ class HandleCollisionsAction(Action):
         _is_game_over (boolean): Whether or not the game is over.
     """
 
-    def __init__(self, keyboard_service):
+    def __init__(self, keyboard_service, handle_menu_system):
         """Constructs a new HandleCollisionsAction."""
 
         self._keyboard_service = keyboard_service
+        self._handle_menu_system = handle_menu_system
 
         self._is_game_over = False
+        self._game_over_timer = 0
         self._who_won = ""
 
     def execute(self, cast, script):
@@ -42,15 +44,22 @@ class HandleCollisionsAction(Action):
 
             self._handle_game_over(cast)
         else:
-            if self._keyboard_service.is_key_down('enter'):
-                # reset game over variable
-                self._is_game_over = False
-                # remove game over message
-                cast.remove_actor("messages", cast.get_first_actor("messages"))
+            if self._game_over_timer < 75:
+                self._game_over_timer += 1
+            else:
+                # run the following code once
+                if self._game_over_timer < 110:
+                    self._game_over_timer = 110
+                    self._handle_menu_system.set_menu_state("highscore")
+                    # remove game over message
+                    cast.remove_actor(
+                        "messages", cast.get_first_actor("messages"))
 
-                # reset snake bodies
-                ship = cast.get_first_actor("ships")
-                ship.reset_ship()
+                # #reset game over variable
+                # self._is_game_over = False
+                # # reset snake bodies
+                # ship = cast.get_first_actor("ships")
+                # ship.reset_ship()
 
     def _handle_laser_enemy_collision(self, cast, groups):
         """Destroys enemies when laser hits them
@@ -130,7 +139,7 @@ class HandleCollisionsAction(Action):
                                 shields = cast.get_first_actor("shields")
 
                                 # ( CODE FOR APPLYING DAMAGE TO SHIELDS HERE )
-                                shields.add_points(-4)
+                                shields.add_points(- enemy.get_damage())
 
                                 # create sparks that bounce off player ship
                                 self._create_sparks(
@@ -144,7 +153,7 @@ class HandleCollisionsAction(Action):
                                         cast, 20, part.get_position(), 10, 23, 190, 40)
 
                                 # remove all the enemies health
-                                enemy.remove_health(100)
+                                enemy.remove_health(1000)
 
                                 # if we have less than 0 shields now
                                 if shields.get_points() < 0:
@@ -166,16 +175,27 @@ class HandleCollisionsAction(Action):
         """
         if self._is_game_over:
 
+            # tell the menu system it's game over
+            self._handle_menu_system.set_game_over(True)
+
             # get center screen position
             x = int(constants.MAX_X / 2)
-            y = int(constants.MAX_Y / 2)
+            y = int(constants.MAX_Y * 0.5)
             position = Point(x, y)
             # create a game over message at that position
             message = Actor()
             message.set_text(
-                f"Game Over!\n\n Press ENTER to play again! ")
+                f"Game Over!")
             message.set_position(position)
             cast.add_actor("messages", message)
+
+            # hide current display elements
+            display_elements = cast.get_actors("scores")
+            for display in display_elements:
+                display.set_color(constants.BLACK)
+            display_elements = cast.get_actors("shields")
+            for display in display_elements:
+                display.set_color(constants.BLACK)
 
             # get ship
             ship = cast.get_first_actor("ships")

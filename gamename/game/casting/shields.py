@@ -11,7 +11,7 @@ class Shields(Actor):
 
     def __init__(self):
         super().__init__()
-        self._points = 30
+        self._points = 10
         self.add_points(0)
         self.set_position(
             Point(constants.CELL_SIZE * 28, constants.CELL_SIZE * 2))
@@ -37,18 +37,19 @@ class Shields(Actor):
 
     def move_next(self):
 
-        if self._flash_timer > 0:
-            self._flash_timer -= 1
-            self._wait_flash -= 1
-            if self._wait_flash <= 0:
-                self._wait_flash = 2
-                if(self._color_toggle == 0):
-                    self._color_toggle = 1
-                    self.set_color(constants.RED)
-                else:
-                    self._color_toggle = 0
-                    self.set_color(constants.WHITE)
+        if self.get_color() != constants.BLACK:
 
-        else:
-            if self.get_color() != constants.BLACK and self.get_color() != constants.WHITE:
+            if self._flash_timer > 0:
+                self._flash_timer -= 1
+                self._wait_flash -= 1
+                if self._wait_flash <= 0:
+                    self._wait_flash = 2
+                    if(self._color_toggle == 0):
+                        self._color_toggle = 1
+                        self.set_color(constants.RED)
+                    else:
+                        self._color_toggle = 0
+                        self.set_color(constants.WHITE)
+
+            elif self.get_color() != constants.WHITE:
                 self.set_color(constants.WHITE)

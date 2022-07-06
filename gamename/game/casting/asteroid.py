@@ -48,15 +48,20 @@ class Asteroid(Actor):
     def get_health(self):
         return self._health
 
+    def get_damage(self):
+        return self._damage
+
     def remove_health(self, amount):
         self._health -= amount
 
         # check to see if asteroid is out of health
         if self._health <= 0:
-            # if yes
-            # apply points to score
-            scoreboard = self._cast.get_first_actor("scores")
-            scoreboard.add_points(self._points)
+
+            # if the amount is 1000 then we hit the player ship, so don't apply score
+            if (amount != 1000):
+                # apply points to score
+                scoreboard = self._cast.get_first_actor("scores")
+                scoreboard.add_points(self._points)
 
             # create special effects ( explosion and sparks )
             for part in self._parts:
@@ -181,7 +186,7 @@ class Asteroid(Actor):
             self._move_timer = self._move_wait
 
             # if asteroid is off screen
-            if self._position.get_y() >= constants.MAX_Y + constants.CELL_SIZE * 5:
+            if self._position.get_y() >= constants.MAX_Y + constants.CELL_SIZE:
                 # delete it
                 self._cast.remove_actor("asteroids", self)
             else:

@@ -83,7 +83,8 @@ class ControlActorsAction(Action):
         # handle rapid fire timer and key hold
         if self._key_fire == True:
             # if the player lets up off the key and the timer is zero
-            if self._keyboard_service.is_key_up('space') and self._key_fire_timer <= 0:
+            # self._keyboard_service.is_key_up('space') and  to make it so you have to press each time
+            if self._key_fire_timer <= 0:
                 # reset key fire so we can shoot again
                 self._key_fire = False
             # increment timer if greater than zero

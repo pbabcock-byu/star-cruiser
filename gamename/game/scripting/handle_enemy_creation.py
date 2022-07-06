@@ -29,6 +29,7 @@ class HandleEnemyCreation(Action):
         self._randomocity = 0
         self._current_stage = -1
         self._paused = False
+        self._last_spawn_list = []
         self._game_stages = [
             {
                 "delaystart": 1,
@@ -36,26 +37,26 @@ class HandleEnemyCreation(Action):
                 "stagedisplay": "Stage One"
             },
             {
-                "delaystart": 1,
-                "duration": 15,
+                "delaystart": 0,
+                "duration": 10,
                 "enemytypes": ["asteroid-small"],
-                "waitspawn": 0.3,
+                "waitspawn": 0.8,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 2,
-                "duration": 15,
+                "delaystart": 0,
+                "duration": 10,
                 "enemytypes": ["asteroid-medium"],
-                "waitspawn": 2,
+                "waitspawn": 0.7,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 2,
-                "duration": 18,
+                "delaystart": 0,
+                "duration": 10,
                 "enemytypes": ["asteroid-large", "asteroid-large"],
-                "waitspawn": 5,
+                "waitspawn": 1,
                 "randomocity": 8,
                 "stagedisplay": "none"
             },
@@ -65,23 +66,24 @@ class HandleEnemyCreation(Action):
                 "stagedisplay": "Stage Two"
             },
             {
-                "delaystart": 1,
+                "delaystart": 0,
                 "duration": 6,
                 "enemytypes": ["asteroid-small-xmove", "asteroid-small"],
-                "waitspawn": 2,
+                "waitspawn": 1,
                 "randomocity": 2,
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 8,
+                "delaystart": 5,
                 "duration": 5,
-                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
+                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large",
+                               "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-small-xmove"],
                 "waitspawn": 2,
                 "randomocity": 0,
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 14,
+                "delaystart": 6,
                 "duration": 6,
                 "enemytypes": ["asteroid-small", "asteroid-small", "asteroid-small"],
                 "waitspawn": 0.2,
@@ -94,15 +96,15 @@ class HandleEnemyCreation(Action):
                 "stagedisplay": "Stage Three"
             },
             {
-                "delaystart": 1,
+                "delaystart": 0,
                 "duration": 6,
-                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
+                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-small-xmove"],
                 "waitspawn": 1,
                 "randomocity": 10,
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 5,
+                "delaystart": 4,
                 "duration": 12,
                 "enemytypes": ["asteroid-huge"],
                 "waitspawn": 1,
@@ -110,7 +112,7 @@ class HandleEnemyCreation(Action):
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 8,
+                "delaystart": 5,
                 "duration": 10,
                 "enemytypes": ["asteroid-giant"],
                 "waitspawn": 2,
@@ -118,9 +120,79 @@ class HandleEnemyCreation(Action):
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 1,
+                "delaystart": 0,
+                "duration": 3,
+                "stagedisplay": "Stage Four"
+            },
+            {
+                "delaystart": 0,
                 "duration": 10,
-                "stagedisplay": "YOU BEAT THE GAME! (so far)"
+                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-small-xmove", "asteroid-huge", "asteroid-small-xmove"],
+                "waitspawn": 1,
+                "randomocity": 10,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 1,
+                "duration": 4,
+                "enemytypes": ["asteroid-huge"],
+                "waitspawn": 1,
+                "randomocity": 4,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 2,
+                "duration": 4,
+                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large",
+                               "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large",
+                               "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-small-xmove"],
+                "waitspawn": 3.5,
+                "randomocity": 0,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 2,
+                "duration": 10,
+                "enemytypes": ["asteroid-small", "asteroid-small", "asteroid-small"],
+                "waitspawn": 0.2,
+                "randomocity": 2,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 5,
+                "duration": 10,
+                "enemytypes": ["asteroid-giant", "asteroid-large", "asteroid-large", "asteroid-large"],
+                "waitspawn": 2,
+                "randomocity": 5,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 3,
+                "stagedisplay": "Stage Five"
+            },
+            {
+                "delaystart": 0,
+                "duration": 25,
+                "enemytypes": ["asteroid-giant", "asteroid-giant", "asteroid-large", "asteroid-small", "asteroid-medium",
+                               "asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove",
+                               "asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove"],
+                "waitspawn": 3,
+                "randomocity": 5,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 3,
+                "stagedisplay": "You beat the game! (So far)"
+            },
+            {
+                "delaystart": 0,
+                "duration": 50,
+                "enemytypes": ["asteroid-small-xmove", "asteroid-giant"],
+                "waitspawn": 0.3,
+                "randomocity": 5,
+                "stagedisplay": "none"
             },
         ]
 
@@ -138,6 +210,8 @@ class HandleEnemyCreation(Action):
             if self._paused == False:
                 # handle action
                 self._handle_stage_progression(cast)
+            else:
+                cast.remove_actors("stage messages")
 
         else:
             pass
@@ -147,29 +221,38 @@ class HandleEnemyCreation(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
+        enemy = 0
         if enemy_type == "asteroid-small":
             asteroid = self._make_asteriod(cast, 0)
             cast.add_actor("asteroids", asteroid)
+            enemy = asteroid
 
         if enemy_type == "asteroid-medium":
             asteroid = self._make_asteriod(cast, 1)
             cast.add_actor("asteroids", asteroid)
+            enemy = asteroid
 
         if enemy_type == "asteroid-large":
             asteroid = self._make_asteriod(cast, 2)
             cast.add_actor("asteroids", asteroid)
+            enemy = asteroid
 
         if enemy_type == "asteroid-small-xmove":
             asteroid = self._make_asteriod(cast, 3)
             cast.add_actor("asteroids", asteroid)
+            enemy = asteroid
 
         if enemy_type == "asteroid-huge":
             asteroid = self._make_asteriod(cast, 4)
             cast.add_actor("asteroids", asteroid)
+            enemy = asteroid
 
         if enemy_type == "asteroid-giant":
             asteroid = self._make_asteriod(cast, 5)
             cast.add_actor("asteroids", asteroid)
+            enemy = asteroid
+
+        return enemy
 
     def _handle_stage_progression(self, cast):
         """ Blah
@@ -199,9 +282,12 @@ class HandleEnemyCreation(Action):
                     # set up randomocity for spawn y positions
                     self._randomocity = self._current_stage["randomocity"]
                     # for every enemy in the enemytypes list for this stage
+                    self._last_spawn_list = []
                     for enemytype in self._current_stage["enemytypes"]:
                         # create an enemy
-                        self._create_enemy_of_type(cast, enemytype)
+                        enemy = self._create_enemy_of_type(cast, enemytype)
+                        if enemy != 0:
+                            self._last_spawn_list.append(enemy)
                 else:
                     # count down timer in seconds
                     self._wait_spawn -= 1 / constants.FRAME_RATE
@@ -210,8 +296,7 @@ class HandleEnemyCreation(Action):
             if self._game_stage != self._current_stage["stagedisplay"]:
                 self._game_stage = self._current_stage["stagedisplay"]
                 # delete the game stage display message
-                cast.remove_actor(
-                    "messages", cast.get_first_actor("messages"))
+                cast.remove_actors("stage messages")
                 # reset other display color to show
                 display_elements = cast.get_actors("scores")
                 for display in display_elements:
@@ -248,7 +333,7 @@ class HandleEnemyCreation(Action):
                         message = Actor()
                         message.set_text(self._game_stage)
                         message.set_position(position)
-                        cast.add_actor("messages", message)
+                        cast.add_actor("stage messages", message)
         # if we are past the duration of this stage
         if self._stage_seconds > self._current_stage["delaystart"] + self._current_stage["duration"]:
             # reset stage timer
@@ -275,11 +360,29 @@ class HandleEnemyCreation(Action):
         Returns:
             reference to the new meteoroid
         """
+        tries = 10
+        free = True
 
         x = random.randint(1, constants.COLUMNS - 1)
-        y = random.randint(-5 - self._randomocity, -4)
-
+        y = random.randint(-5 - self._randomocity, -5)
         position = Point(x, y)
+
+        while not free:
+            # reset
+            free = True
+            if tries > 0:
+                # try n times to find a free position
+                tries -= 1
+                # if position is not free continue the loop
+                for enemy in self._last_spawn_list:
+                    if position.equals(enemy.get_position()):
+                        free = False
+            if free == False:
+                # pick a new spot to try
+                x = random.randint(1, constants.COLUMNS - 1)
+                y = random.randint(-5 - self._randomocity, -5)
+                position = Point(x, y)
+
         position = position.scale(constants.CELL_SIZE)
         velocity = Point(0, constants.CELL_SIZE)
         asteroid = Asteroid(cast)

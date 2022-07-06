@@ -36,6 +36,7 @@ class DrawActorsAction(Action):
             score = cast.get_first_actor("scores")
             shield = cast.get_first_actor("shields")
             messages = cast.get_actors("messages")
+            stage_messages = cast.get_actors("stage messages")
             # get ship parts
             ship = cast.get_first_actor("ships")
             parts = ship.get_parts()
@@ -56,6 +57,7 @@ class DrawActorsAction(Action):
 
         # get menu items
         menus = cast.get_actors("menus")
+        highscores = cast.get_actors("highscores")
 
         # DRAW ACTORS - - - - - - -
         self._video_service.clear_buffer()
@@ -64,6 +66,7 @@ class DrawActorsAction(Action):
             self._video_service.draw_actor(score)
             self._video_service.draw_actor(shield)
             self._video_service.draw_actors(messages, True)
+            self._video_service.draw_actors(stage_messages, True)
             # draw player ship
             self._video_service.draw_actors(parts)
             # draw lasers
@@ -79,5 +82,6 @@ class DrawActorsAction(Action):
 
         # draw menus
         self._video_service.draw_actors(menus, True)
+        self._video_service.draw_actors(highscores)
 
         self._video_service.flush_buffer()
