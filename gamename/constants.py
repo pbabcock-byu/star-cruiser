@@ -25,6 +25,7 @@ BROWN = Color(165, 42, 42)
 BLUE = Color(5, 90, 255)
 ORANGE = Color(255, 190, 0)
 AQUA = Color(100, 255, 255)
+PINK = Color(255, 150, 150)
 
 # Ship shields and damage
 STARTSHEILDS = 20
@@ -82,34 +83,38 @@ ASTEROID_TYPES_LIST = [
     },
     {
         "name": "GIANT",
-        "text": "@",
+        "text": "▣",
         "damage": 6,
         "health": 5,
         "points": 6
     }]
 
 
-ASTEROID_TYPES = [["SML", "`"], ["MED", "*"],
-                  ["LRG", "@"], ["SML-xmove", "."], ["HUGE", "@"], ["GIANT", "☐"]]
+HTX = "☐"
+HUGE_ASTEROID_LAYOUT = [["@", 0, 0, 0], ["@", 1, 0, 0], ["@", -1, 0, 0], ["@", 0, 1, 0], ["@", 0, -1, 0],
+                        ["@", -1, -1, 0], ["@", 1, -1, 0],
+                        ["@", -1, 1, 0], ["@", 1, 1, 0],
+                        ["@", -2, 0, 0], ["@", 0, -2, 0], ["@", 2, 0, 0], ["@", 0, 2, 0]]
 
-ASTEROIDSLRG_DAMAGE = 3
-ASTEROIDSMED_DAMAGE = 2
-ASTEROIDSSML_DAMAGE = 1
+GTX = "@"
+GIANT_ASTEROID_LAYOUT = [[GTX, 0, 0, 0], [GTX, 1, 0, 0], [GTX, -1, 0, 0], [GTX, 0, 1, 0], [GTX, 0, -1, 0],
+                         [GTX, -1, -1, 0], [GTX, 1, -1, 0],
+                         [GTX, -1, 1, 0], [GTX, 1, 1, 0],
+                         [GTX, -2, 0, 0], [GTX, 0, -2, 0],
+                         [GTX, 2, 0, 0], [GTX, 0, 2, 0],
 
-ASTEROID_HEALTH_LIST = {
-    "SML": 1,
-    "MED": 1,
-    "LRG": 2,
-    "SML-xmove": 1,
-    "HUGE": 3,
-    "GIANT": 5
-}
+                         [GTX, -2, -2, 0], [GTX, 2, -2, 0],
+                         [GTX, -2, 2, 0], [GTX, 2, 2, 0],
 
-# Points for each Asteroid kill
-ASTEROIDSGIANT_KILL = 6
-ASTEROIDSHUGE_KILL = 3
-ASTEROIDSSML_xmove_KILL = 3
-ASTEROIDSLRG_KILL = 2
-ASTEROIDSMED_KILL = 1
-ASTEROIDSSML_KILL = 1
-# end asteroid atts. - - - - - - - - - - - - - - - - - -
+                         [GTX, -2, -1, 0], [GTX, -2, 1, 0],
+                         [GTX, 2, 1, 0], [GTX, 2, -1, 0],
+                         [GTX, -1, 2, 0], [GTX, 1, 2, 0],
+                         [GTX, 1, -2, 0], [GTX, -1, -2, 0],
+
+                         [GTX, -3, -1, 0], [GTX, -3, 1, 0],
+                         [GTX, 3, 1, 0], [GTX, 3, -1, 0],
+                         [GTX, -1, 3, 0], [GTX, 1, 3, 0],
+                         [GTX, 1, -3, 0], [GTX, -1, -3, 0],
+                         [GTX, 0, 3, 0], [GTX, 0, -3, 0],
+                         [GTX, -3, 0, 0], [GTX, 3, 0, 0]
+                         ]

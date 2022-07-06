@@ -14,55 +14,51 @@ class Asteroid(Actor):
     Also the bigger an the less points the player will get for shooting it
 
     Attributes:
-        _type (String): "LRG" or "MED" or "SML" or "HUGE"
+
     """
 
-    def __init__(self, cast, type):
+    def __init__(self, cast):
         super().__init__()
         self._cast = cast
-        # default attributes
-        self._type = type
+
+        # these are set in the set_up_type() method
+        self._name = "SML"
+        self._text = "."
+        self._health = 1
+        self._damage = 1
+        self._points = 1
+
+        # for movement
         self._move_wait = 4
         self._move_timer = 0
+
+        # for building out larger asteroid structures
         self._parts = [self]
-        self._health = constants.ASTEROID_HEALTH_LIST[self._type]
 
     def get_parts(self):
         return self._parts
 
-    def get_type(self):
+    def get_name(self):
         """Gets the Asteriod's size
         Returns:
             string: The type.
         """
-        return self._type
+        return self._name
 
     def get_health(self):
         return self._health
 
     def remove_health(self, amount):
         self._health -= amount
-        # check to see if we are out of health
+
+        # check to see if asteroid is out of health
         if self._health <= 0:
+            # if yes
+            # apply points to score
             scoreboard = self._cast.get_first_actor("scores")
+            scoreboard.add_points(self._points)
 
-            if self._type == "HUGE":
-                scoreboard.add_points(constants.ASTEROIDSHUGE_KILL)
-            elif self._type == "GIANT":
-                scoreboard.add_points(constants.ASTEROIDSGIANT_KILL)
-            elif self._type == "LRG":
-                scoreboard.add_points(constants.ASTEROIDSLRG_KILL)
-            elif self._type == "SML-xmove":
-                scoreboard.add_points(constants.ASTEROIDSSML_xmove_KILL)
-            elif self._type == "MED":
-                scoreboard.add_points(constants.ASTEROIDSMED_KILL)
-            elif self._type == "SML":
-                scoreboard.add_points(constants.ASTEROIDSSML_KILL)
-
-            else:
-                scoreboard.add_points(0)
-
-                scoreboard.add_points(1)
+            # create special effects ( explosion and sparks )
             for part in self._parts:
                 # create an explosion at the parts position
                 explosion = Explosion(self._cast)
@@ -86,47 +82,52 @@ class Asteroid(Actor):
                     # add explosion to "explosions" cast group
                     self._cast.add_actor("sparks", spark)
 
-            # if we are a giant asteroid, generate some huge ones when we are broken:
-            if self.get_type() == "GIANT":
+            # if we are a giant asteroid, generate some huge asteroids when we are broken:
+            if self.get_name() == "GIANT":
                 for i in range(0, 2):
                     this = self._create_asteroid_when_destroyed(4)
                     self._cast.add_actor("asteroids", this)
 
-            # if we are a giant asteroid, generate some huge ones when we are broken:
-            if self.get_type() == "HUGE":
+            # if we are a huge asteroid, generate some large asteroids when we are broken:
+            if self.get_name() == "HUGE":
                 for i in range(0, 3):
                     this = self._create_asteroid_when_destroyed(2)
                     self._cast.add_actor("asteroids", this)
 
             # remove ourselves
-
             self._cast.remove_actor("asteroids", self)
 
-    def set_up_parts(self):
+    def set_up_type(self, type):
         """Updates Asteriod's size.
         Args:
             type (string): The Asteriod's size.
         """
-        # update attributes based on type
-        # health
-        self._health = constants.ASTEROID_HEALTH_LIST[self._type]
+        asteroid_type_info = constants.ASTEROID_TYPES_LIST[type]
+
+        self._name = asteroid_type_info["name"]
+        self._text = asteroid_type_info["text"]
+        self._health = asteroid_type_info["health"]
+        self._damage = asteroid_type_info["damage"]
+        self._points = asteroid_type_info["points"]
+
+        # update speed, movement, and structure based on name
         # move speed
-        if self._type == "SML":
+        if self._name == "SML":
             self._move_wait = random.choice([2, 3, 4])
 
-        if self._type == "MED":
+        if self._name == "MED":
             self._move_wait = random.choice([3, 4])
 
-        if self._type == "LRG":
+        if self._name == "LRG":
             self._move_wait = 4
-
-        if self._type == "SML-xmove":
+        # movement
+        if self._name == "SML-xmove":
             # cause us to move horizontally
             self._velocity = Point(random.choice(
                 [-constants.CELL_SIZE, constants.CELL_SIZE]), constants.CELL_SIZE)
-
-        if self._type in ["HUGE", "GIANT"]:
-            # this astroid is structure of multiple actors
+        # structure
+        if self._name in ["HUGE", "GIANT"]:
+            # this astroid is a structure of multiple actors
             self._move_wait = 5
             self._prepare_structured_asteroid_body()
 
@@ -137,38 +138,13 @@ class Asteroid(Actor):
         """
         # set origin position
         origin = self.get_position()
-
-        # set layout information
-        if self._type == "HUGE":
-            asteroid_layout = [["@", 0, 0, 0], ["@", 1, 0, 0], ["@", -1, 0, 0], ["@", 0, 1, 0], ["@", 0, -1, 0],
-                               ["@", -1, -1, 0], ["@", 1, -1, 0],
-                               ["@", -1, 1, 0], ["@", 1, 1, 0],
-                               ["@", -2, 0, 0], ["@", 0, -2, 0], ["@", 2, 0, 0], ["@", 0, 2, 0]]
-        if self._type == "GIANT":
-            asteroid_layout = [["@", 0, 0, 0], ["@", 1, 0, 0], ["@", -1, 0, 0], ["@", 0, 1, 0], ["@", 0, -1, 0],
-                               ["@", -1, -1, 0], ["@", 1, -1, 0],
-                               ["@", -1, 1, 0], ["@", 1, 1, 0],
-                               ["@", -2, 0, 0], ["@", 0, -2, 0],
-                               ["@", 2, 0, 0], ["@", 0, 2, 0],
-
-                               ["@", -2, -2, 0], ["@", 2, -2, 0],
-                               ["@", -2, 2, 0], ["@", 2, 2, 0],
-
-                               ["@", -2, -1, 0], ["@", -2, 1, 0],
-                               ["@", 2, 1, 0], ["@", 2, -1, 0],
-                               ["@", -1, 2, 0], ["@", 1, 2, 0],
-                               ["@", 1, -2, 0], ["@", -1, -2, 0],
-
-                               ["@", -3, -1, 0], ["@", -3, 1, 0],
-                               ["@", 3, 1, 0], ["@", 3, -1, 0],
-                               ["@", -1, 3, 0], ["@", 1, 3, 0],
-                               ["@", 1, -3, 0], ["@", -1, -3, 0],
-                               ["@", 0, 3, 0], ["@", 0, -3, 0],
-                               ["@", -3, 0, 0], ["@", 3, 0, 0]
-                               ]
-
+        # set up layout information
+        if self._name == "HUGE":
+            asteroid_layout = constants.HUGE_ASTEROID_LAYOUT
+        if self._name == "GIANT":
+            asteroid_layout = constants.GIANT_ASTEROID_LAYOUT
+        # set up layout color info
         asteroid_colors = [constants.BROWN]
-
         # generate parts list from layout
         self._parts = self._generate_structure(
             origin, self._velocity, asteroid_layout, asteroid_colors)
@@ -183,16 +159,13 @@ class Asteroid(Actor):
         x = self._position.get_x() + random.randint(-1, 1) * constants.CELL_SIZE
         y = self._position.get_y() + random.randint(-1, 0) * constants.CELL_SIZE
         position = Point(x, y)
-
         velocity = Point(random.randint(-1, 1) *
                          constants.CELL_SIZE, 1 * constants.CELL_SIZE)
-        type = constants.ASTEROID_TYPES[asteroidtype]
-        asteroid = Asteroid(self._cast, type[0])
-        asteroid.set_text(type[1])
-        asteroid.set_color(constants.BROWN)
+        asteroid = Asteroid(self._cast)
+        asteroid.set_color(self._color)
         asteroid.set_position(position)
         asteroid.set_velocity(velocity)
-        asteroid.set_up_parts()
+        asteroid.set_up_type(asteroidtype)
         # returns it so we can add it to the cast "asteriods" group
         return asteroid
 

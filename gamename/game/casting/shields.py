@@ -50,4 +50,5 @@ class Shields(Actor):
                     self.set_color(constants.WHITE)
 
         else:
-            self.set_color(constants.WHITE)
+            if self.get_color() != constants.BLACK and self.get_color() != constants.WHITE:
+                self.set_color(constants.WHITE)

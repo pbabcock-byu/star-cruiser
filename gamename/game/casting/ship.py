@@ -20,6 +20,7 @@ class Ship(Actor):
         self._is_hurt = False
         self._is_hurt_timer = 0
         self._is_dead = False
+        self._flash_color = constants.AQUA
 
     def get_is_hurt(self):
         return self._is_hurt
@@ -35,9 +36,6 @@ class Ship(Actor):
         self._is_hurt = is_hurt
         if is_hurt == True:
             self._is_hurt_timer = 10
-            # set ship color to red
-            for part in self._parts[:-1]:
-                part.set_color(constants.AQUA)
 
     def get_parts(self):
         return self._parts
@@ -67,6 +65,15 @@ class Ship(Actor):
         # is hurt timer
         if self._is_hurt_timer > 0:
             self._is_hurt_timer -= 1
+
+            if self._is_hurt_timer % 2 == 0:
+                if self._flash_color == constants.AQUA:
+                    self._flash_color = constants.PINK
+                else:
+                    self._flash_color = constants.AQUA
+                # set ship flashing color
+                for part in self._parts[:-1]:
+                    part.set_color(self._flash_color)
         else:
             if self.get_is_hurt() == True:
                 self._is_hurt = False

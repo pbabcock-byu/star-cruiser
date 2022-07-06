@@ -28,14 +28,15 @@ class HandleEnemyCreation(Action):
         self._stage_seconds = 0
         self._randomocity = 0
         self._current_stage = -1
+        self._paused = False
         self._game_stages = [
             {
-                "delaystart": 0,
-                "duration": 1,
+                "delaystart": 1,
+                "duration": 2,
                 "stagedisplay": "Stage One"
             },
             {
-                "delaystart": 0,
+                "delaystart": 1,
                 "duration": 15,
                 "enemytypes": ["asteroid-small"],
                 "waitspawn": 0.3,
@@ -118,10 +119,13 @@ class HandleEnemyCreation(Action):
             },
             {
                 "delaystart": 1,
-                "duration": 2,
+                "duration": 10,
                 "stagedisplay": "YOU BEAT THE GAME! (so far)"
             },
         ]
+
+    def set_paused(self, paused):
+        self._paused = paused
 
     def execute(self, cast, script):
         """Executes the handle enemy creation action.
@@ -131,8 +135,10 @@ class HandleEnemyCreation(Action):
             script (Script): The script of Actions in the game.
         """
         if not self._is_game_over:
-            # handle action
-            self._handle_stage_progression(cast)
+            if self._paused == False:
+                # handle action
+                self._handle_stage_progression(cast)
+
         else:
             pass
 
@@ -276,12 +282,10 @@ class HandleEnemyCreation(Action):
         position = Point(x, y)
         position = position.scale(constants.CELL_SIZE)
         velocity = Point(0, constants.CELL_SIZE)
-        type = constants.ASTEROID_TYPES_LIST[asteroidtype]
-        asteroid = Asteroid(cast, type["name"])
-        asteroid.set_text(type["text"])
+        asteroid = Asteroid(cast)
         asteroid.set_color(constants.BROWN)
         asteroid.set_position(position)
         asteroid.set_velocity(velocity)
-        asteroid.set_up_parts()
+        asteroid.set_up_type(asteroidtype)
         # returns it so we can add it to the cast "asteriods" group
         return asteroid

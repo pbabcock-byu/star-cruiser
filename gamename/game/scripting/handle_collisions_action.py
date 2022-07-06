@@ -110,13 +110,21 @@ class HandleCollisionsAction(Action):
             # then, check for collisions
             parts = ship.get_parts()
             # loop through every part
+            hit = False
             for part in parts:
+                if hit:
+                    break
                 for group in groups:
+                    if hit:
+                        break
                     # loop through every enemy in this group
                     for enemy in cast.get_actors(group):
+                        if hit:
+                            break
                         for enemypart in enemy._parts:
                             if part.get_position().equals(enemypart.get_position()):
-
+                                # set hit to true so we can break the loop and only apply one hit at a time
+                                hit = True
                                 # if any player part collides with any enemy part
                                 # get reference to shields instance
                                 shields = cast.get_first_actor("shields")
@@ -146,6 +154,9 @@ class HandleCollisionsAction(Action):
                                 else:
                                     # set ship is hurt to true
                                     ship.set_is_hurt(True)
+
+                                # break the current loop
+                                break
 
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.
