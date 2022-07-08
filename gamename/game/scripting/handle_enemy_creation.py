@@ -120,15 +120,15 @@ class HandleEnemyCreation(Action):
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 0,
-                "duration": 3,
+                "delaystart": 1,
+                "duration": 2,
                 "stagedisplay": "Stage Four"
             },
             {
                 "delaystart": 0,
                 "duration": 10,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-small-xmove", "asteroid-huge", "asteroid-small-xmove"],
-                "waitspawn": 1,
+                "waitspawn": 1.3,
                 "randomocity": 10,
                 "stagedisplay": "none"
             },
@@ -154,7 +154,7 @@ class HandleEnemyCreation(Action):
                 "delaystart": 2,
                 "duration": 10,
                 "enemytypes": ["asteroid-small", "asteroid-small", "asteroid-small"],
-                "waitspawn": 0.2,
+                "waitspawn": 0.4,
                 "randomocity": 2,
                 "stagedisplay": "none"
             },
@@ -167,8 +167,8 @@ class HandleEnemyCreation(Action):
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 0,
-                "duration": 3,
+                "delaystart": 1,
+                "duration": 2,
                 "stagedisplay": "Stage Five"
             },
             {
@@ -177,7 +177,60 @@ class HandleEnemyCreation(Action):
                 "enemytypes": ["asteroid-giant", "asteroid-giant", "asteroid-large", "asteroid-small", "asteroid-medium",
                                "asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove",
                                "asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove", "asteroid-small-xmove"],
-                "waitspawn": 3,
+                "waitspawn": 5,
+                "randomocity": 5,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 2,
+                "duration": 5,
+                "enemytypes": ["asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small"],
+                "waitspawn": 0.1,
+                "randomocity": 2,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 1,
+                "duration": 2,
+                "stagedisplay": "Stage Six"
+            },
+            {
+                "delaystart": 1,
+                "duration": 1,
+                "enemytypes": ["asteroid-small-xmove"],
+                "waitspawn": 0.2,
+                "randomocity": 2,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 1,
+                "duration": 1,
+                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
+                "waitspawn": 0.2,
+                "randomocity": 0,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 1,
+                "duration": 3,
+                "enemytypes": ["asteroid-giant", "asteroid-giant", "asteroid-giant", "asteroid-giant"],
+                "waitspawn": 2,
+                "randomocity": 0,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 1,
+                "duration": 3,
+                "enemytypes": ["asteroid-huge", "asteroid-huge", "asteroid-huge"],
+                "waitspawn": 2,
+                "randomocity": 0,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 1,
+                "duration": 3,
+                "enemytypes": ["asteroid-medium"],
+                "waitspawn": 0.7,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
@@ -190,7 +243,7 @@ class HandleEnemyCreation(Action):
                 "delaystart": 0,
                 "duration": 50,
                 "enemytypes": ["asteroid-small-xmove", "asteroid-giant"],
-                "waitspawn": 0.3,
+                "waitspawn": 0.7,
                 "randomocity": 5,
                 "stagedisplay": "none"
             },
