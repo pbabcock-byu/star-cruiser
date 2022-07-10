@@ -59,7 +59,7 @@ class ControlActorsAction(Action):
             if self._keyboard_service.is_key_down('space') and self._key_fire == False:
 
                 # this plays the sound bype
-                playsound(constants.SHIPFIRE_SOUND)
+                playsound(constants.SHIPFIRE_SOUND, block=False)
                 print(
                     f'playing sound using  playsound: {constants.SHIPFIRE_SOUND}')
 
