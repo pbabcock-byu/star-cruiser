@@ -439,7 +439,6 @@ class HandleEnemyCreation(Action):
         position = position.scale(constants.CELL_SIZE)
         velocity = Point(0, constants.CELL_SIZE)
         asteroid = Asteroid(cast)
-        asteroid.set_color(constants.BROWN)
         asteroid.set_position(position)
         asteroid.set_velocity(velocity)
         asteroid.set_up_type(asteroidtype)

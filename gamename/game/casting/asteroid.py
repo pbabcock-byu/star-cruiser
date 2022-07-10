@@ -114,17 +114,10 @@ class Asteroid(Actor):
         self._health = asteroid_type_info["health"]
         self._damage = asteroid_type_info["damage"]
         self._points = asteroid_type_info["points"]
+        self._move_wait = asteroid_type_info["movewait"]()
+        self.set_color(asteroid_type_info["color"])
 
-        # update speed, movement, and structure based on name
-        # move speed
-        if self._name == "SML":
-            self._move_wait = random.choice([2, 3, 4])
-
-        if self._name == "MED":
-            self._move_wait = random.choice([3, 4])
-
-        if self._name == "LRG":
-            self._move_wait = 4
+        # update movement, and structure based on name
         # movement
         if self._name == "SML-xmove":
             # cause us to move horizontally
@@ -133,7 +126,6 @@ class Asteroid(Actor):
         # structure
         if self._name in ["HUGE", "GIANT"]:
             # this astroid is a structure of multiple actors
-            self._move_wait = 5
             self._prepare_structured_asteroid_body()
 
     def _prepare_structured_asteroid_body(self):
@@ -149,7 +141,7 @@ class Asteroid(Actor):
         if self._name == "GIANT":
             asteroid_layout = constants.GIANT_ASTEROID_LAYOUT
         # set up layout color info
-        asteroid_colors = [constants.BROWN]
+        asteroid_colors = [self.get_color()]
         # generate parts list from layout
         self._parts = self._generate_structure(
             origin, self._velocity, asteroid_layout, asteroid_colors)
