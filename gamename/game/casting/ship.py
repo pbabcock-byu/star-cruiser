@@ -49,6 +49,7 @@ class Ship(Actor):
         self._prepare_ship()
 
     def move_next(self):
+
         # if the body exists
         if len(self._parts) > 0:
             # move all parts
