@@ -32,11 +32,12 @@ BREEN = Color(245, 120, 22)
 
 
 # Ship shields and damage
+MAXSHIELDS = 40
 STARTSHEILDS = 20
 LOWSHIELDS = 5
 
 # Sound
-SHIPFIRE_SOUND = ""
+SHIPFIRE_SOUND = "gamename\game\sounds\sf_laser_15.mp3"
 ASTEROIDSEXPLOSION_SOUND = ""
 SHIPSEXPLOSION_SOUND = ""
 LOWSHIELDSWARNING_SOUND = ""

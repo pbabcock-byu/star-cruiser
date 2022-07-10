@@ -3,6 +3,8 @@ from game.scripting.action import Action
 from game.shared.point import Point
 from game.casting.actor import Actor
 from game.casting.laser import Laser
+# need this module to play sounds
+from playsound import playsound
 
 
 class ControlActorsAction(Action):
@@ -55,6 +57,11 @@ class ControlActorsAction(Action):
         if ship.get_is_dead() == False and ship.get_is_hurt() == False:
             # if player presses the space bar
             if self._keyboard_service.is_key_down('space') and self._key_fire == False:
+
+                # this plays the sound bype
+                playsound(constants.SHIPFIRE_SOUND)
+                print(
+                    f'playing sound using  playsound: {constants.SHIPFIRE_SOUND}')
 
                 # set key fire so only one bullet is fired at a time
                 self._key_fire = True
