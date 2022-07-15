@@ -5,6 +5,8 @@ from game.scripting.action import Action
 from game.shared.point import Point
 from game.casting.explosion import Explosion
 from game.casting.spark import Spark
+# need this module to play sounds
+from playsound import playsound
 
 
 class HandleCollisionsAction(Action):
@@ -163,6 +165,10 @@ class HandleCollisionsAction(Action):
                                 else:
                                     # set ship is hurt to true
                                     ship.set_is_hurt(True)
+
+                                    if shields.get_points() <= 10:
+                                        playsound(
+                                            constants.LOWSHIELDSWARNING_SOUND, block=False)
 
                                 # break the current loop
                                 break

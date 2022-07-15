@@ -40,7 +40,7 @@ LOWSHIELDS = 5
 SHIPFIRE_SOUND = "gamename\game\sounds\sf_laser_15.mp3"
 ASTEROIDSEXPLOSION_SOUND = ""
 SHIPSEXPLOSION_SOUND = ""
-LOWSHIELDSWARNING_SOUND = ""
+LOWSHIELDSWARNING_SOUND = "gamename\game\sounds\warningprimaryshieldsfailing_ep.mp3"
 GAMEOVER_SOUND = ""
 
 # Ship Layout
