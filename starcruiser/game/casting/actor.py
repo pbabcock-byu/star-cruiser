@@ -120,14 +120,19 @@ class Actor:
 
     def _generate_structure(self, origin, velocity, layout_list, color_list):
         """
-        Returns a list of actors according to a layout list
+        Returns a list of actors according to a layout list.
+        Basec positions relative to an origin point.
         Used for creating multi-part structures (Ex: ship, asteroid)
         """
+        # declare empty list
         parts = []
+        # go through layout list
         for part in layout_list:
+            # get part position relative to origin point
             x = origin.get_x() + part[1] * constants.CELL_SIZE
             y = origin.get_y() + part[2] * constants.CELL_SIZE
             position = Point(x, y)
+            # set other attributes
             text = part[0]
             color = color_list[part[3]]
             part = Actor()
@@ -135,6 +140,7 @@ class Actor:
             part.set_velocity(velocity)
             part.set_text(text)
             part.set_color(color)
+            # append it to the list
             parts.append(part)
         # returns the list of parts
         return parts

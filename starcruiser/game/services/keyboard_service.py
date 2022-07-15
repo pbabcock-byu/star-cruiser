@@ -15,18 +15,24 @@ class KeyboardService:
         """Constructs a new KeyboardService."""
         self._keys = {}
 
+        # for player movement
         self._keys['left'] = pyray.KEY_LEFT
         self._keys['right'] = pyray.KEY_RIGHT
 
+        # for player fire weapon
+        self._keys['space'] = pyray.KEY_SPACE
+
+        # for menu selections
         self._keys['up'] = pyray.KEY_UP
         self._keys['down'] = pyray.KEY_DOWN
-
-        self._keys['space'] = pyray.KEY_SPACE
+        
+        # for menu selections, pause game
         self._keys['enter'] = pyray.KEY_ENTER
 
+        # for entering initials into highscore board
         self._keys['back'] = pyray.KEY_BACKSPACE
 
-        # letter keys
+        # letter keys for entering initials into highscore board
         self._keys['a'] = pyray.KEY_A
         self._keys['b'] = pyray.KEY_B
         self._keys['c'] = pyray.KEY_C
@@ -54,6 +60,9 @@ class KeyboardService:
         self._keys['y'] = pyray.KEY_Y
         self._keys['z'] = pyray.KEY_Z
 
+        # for easily checking every letter key
+        self._letters_list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+
     def is_key_up(self, key):
         """Checks if the given key is currently up.
 
@@ -75,10 +84,12 @@ class KeyboardService:
     def is_any_letter_key_down(self):
         """Checks if any letter keys are currently down.
         """
-        for letter in ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]:
+        # for every letter in letters list
+        for letter in self._letters_list:
+            # check it's associated pyray key
             pyray_key = self._keys[letter]
             if pyray.is_key_down(pyray_key):
                 # return the letter
                 return letter
-        # else
+        # else return False
         return False

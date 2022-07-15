@@ -30,37 +30,46 @@ class DrawActorsAction(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
-        # GET ACTORS TO DRAW - - - -
+        # GATHER ACTORS TO DRAW - - -
+
+        # menu items
+        menus = cast.get_actors("menus")
+        highscores = cast.get_actors("highscores")
+
+        # if game is started get gameplay actors
         if self._game_started:
-            # get display elements
+
+            # display elements
             score = cast.get_first_actor("scores")
             shield = cast.get_first_actor("shields")
             messages = cast.get_actors("messages")
             stage_messages = cast.get_actors("stage messages")
-            # get ship parts
+            # ship parts
             ship = cast.get_first_actor("ships")
             parts = ship.get_parts()
-            # get lasers
+            # lasers
             lasers = cast.get_actors("lasers")
-            # get asteroids
+            # asteroids
             asteroid_parts = []
             asteroids = cast.get_actors("asteroids")
+            # append all asteroid parts into one list
             for asteroid in asteroids:
                 for part in asteroid.get_parts():
                     asteroid_parts.append(part)
-            # get explosions
+            # explosions
             explosions = cast.get_actors("explosions")
-            # get sparks
+            # sparks
             sparks = cast.get_actors("sparks")
-            # get upgrades
+            # upgrades
             upgrades = cast.get_actors("upgrades")
-
-        # get menu items
-        menus = cast.get_actors("menus")
-        highscores = cast.get_actors("highscores")
 
         # DRAW ACTORS - - - - - - -
         self._video_service.clear_buffer()
+
+        # draw menus
+        self._video_service.draw_actors(menus, True)
+        self._video_service.draw_actors(highscores)
+
         if self._game_started:
             # draw hud elements
             self._video_service.draw_actor(score)
@@ -79,9 +88,5 @@ class DrawActorsAction(Action):
             self._video_service.draw_actors(sparks)
             # draw upgrades
             self._video_service.draw_actors(upgrades)
-
-        # draw menus
-        self._video_service.draw_actors(menus, True)
-        self._video_service.draw_actors(highscores)
 
         self._video_service.flush_buffer()

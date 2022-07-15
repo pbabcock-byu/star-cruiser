@@ -11,9 +11,22 @@ class Asteroid(Actor):
     """
     Asteriod are objects that will be flying in space
     different size asteriod will do diffent amounts of damage if they hit the space ship
-    Also the bigger an the less points the player will get for shooting it
+    Also the bigger an the more points the player will get for shooting it
 
     Attributes:
+        name (string): "SML", "MED", "LRG", "SML-xmove", "GIANT", "HUGE", used to look up asteroid attributes in the ASTEROID_TYPES_LIST (constants)
+        text (string): used to display the asteroid, ex: medium asteroid = "*" large asteroid = "@"
+        health (int): how many shots it takes to destroy this asteroid
+        damage (int): how much damage the asteroid does to the player
+        points (int): how many points the asteroid is worth if it's destroyed
+
+        move_wait (int): waits this many frames between moving (used to make asteroids move slower)
+        move_timer (int): ^ used by move wait
+
+        hit_sound ("string"): reference to sound file to play when this asteroid gets shot by a laser
+        exp_sound ("string"): reference to sound file to play when this asteroid gets blown up
+
+        parts (list): list of individual parts of a large structured asteroid
 
     """
 
@@ -43,24 +56,12 @@ class Asteroid(Actor):
         return self._parts
 
     def get_name(self):
-        """Gets the Asteriod's size
-        Returns:
-            string: The type.
-        """
         return self._name
 
     def get_hit_sound(self):
-        """Gets the Asteriod's hit sound
-        Returns:
-            string: The sound string for audio service
-        """
         return self._hit_sound
 
     def get_exp_sound(self):
-        """Gets the Asteriod's hit sound
-        Returns:
-            string: The sound string for audio service
-        """
         return self._exp_sound       
 
     def get_health(self):
@@ -70,6 +71,11 @@ class Asteroid(Actor):
         return self._damage
 
     def remove_health(self, amount):
+        """ Removes a certain amount of health when hit by a laser or by the player ship
+        Args:
+            amount (int): the amount of damage that is occuring
+        """
+        # apply the damage
         self._health -= amount
 
         # check to see if asteroid is out of health
@@ -77,13 +83,13 @@ class Asteroid(Actor):
 
             # if the amount is 1000 then we hit the player ship, so don't apply score
             if (amount != 1000):
-                # apply points to score
+                # otherwise apply this asteroids points worth to score
                 scoreboard = self._cast.get_first_actor("scores")
                 scoreboard.add_points(self._points)
 
-            # create special effects ( explosion and sparks )
+            # Do special effects ( explosion and sparks )
             for part in self._parts:
-                # create an explosion at the parts position
+                # create an explosion at each parts position
                 explosion = Explosion(self._cast)
                 explosion.set_text(".")
                 explosion.set_color(constants.WHITE)
@@ -95,7 +101,7 @@ class Asteroid(Actor):
                 self._cast.add_actor("explosions", explosion)
 
                 for i in range(0, 3):
-                    # create some sparks at our location
+                    # create three sparks at each parts location
                     spark = Spark(self._cast)
                     spark.set_text(".")
                     spark.set_color(constants.WHITE)
@@ -105,13 +111,13 @@ class Asteroid(Actor):
                     # add explosion to "explosions" cast group
                     self._cast.add_actor("sparks", spark)
 
-            # if we are a giant asteroid, generate some huge asteroids when we are broken:
+            # if this is a giant asteroid, generate some HUGE asteroids when we are broken:
             if self.get_name() == "GIANT":
                 for i in range(0, 2):
                     this = self._create_asteroid_when_destroyed(4)
                     self._cast.add_actor("asteroids", this)
 
-            # if we are a huge asteroid, generate some large asteroids when we are broken:
+            # if this is a huge asteroid, generate some LARGE asteroids when we are broken:
             if self.get_name() == "HUGE":
                 for i in range(0, 3):
                     this = self._create_asteroid_when_destroyed(2)
@@ -120,101 +126,100 @@ class Asteroid(Actor):
             # remove ourselves
             self._cast.remove_actor("asteroids", self)
 
-            # return whether we blew up so handle collisions can play sound
+            # return whether we blew up so handle_collisions can play appropriate sound
             return True
         else:
             return False
 
     def set_up_type(self, type):
-        """Updates Asteriod's size.
+        """Updates Asteriod's attributes based on it's type
         Args:
             type (string): The Asteriod's size.
         """
+        # get object with appropriate info from list in constants
         asteroid_type_info = constants.ASTEROID_TYPES_LIST[type]
-
+        # update our member variables with that objects values
         self._name = asteroid_type_info["name"]
         self._text = asteroid_type_info["text"]
         self._health = asteroid_type_info["health"]
         self._damage = asteroid_type_info["damage"]
         self._points = asteroid_type_info["points"]
-        self._move_wait = asteroid_type_info["movewait"]()
+        self._move_wait = asteroid_type_info["movewait"]() # called as function to get random value
         self.set_color(asteroid_type_info["color"])
         self._hit_sound = asteroid_type_info["hit-sound"]
         self._exp_sound = asteroid_type_info["destroy-snd"]
 
-        # update movement, and structure based on name
-        # movement
+        # apply special horizontal movement to "SML-xmove" asteroids
         if self._name == "SML-xmove":
-            # cause us to move horizontally
-            self._velocity = Point(random.choice(
-                [-constants.CELL_SIZE, constants.CELL_SIZE]), constants.CELL_SIZE)
-        # structure
+            self._velocity = Point(random.choice([-constants.CELL_SIZE, constants.CELL_SIZE]), constants.CELL_SIZE)
+
+        # generate structures of parts for "HUGE" and "GIANT" asteroids
         if self._name in ["HUGE", "GIANT"]:
             # this astroid is a structure of multiple actors
             self._prepare_structured_asteroid_body()
 
     def _prepare_structured_asteroid_body(self):
         """
-        Creates the structure of actors to form a huge asteroid
-        self._parts
+        Creates the structure of actors to form a huge asteroid using a layout.
+        Stores each Actor reference in self._parts list.
         """
-        # set origin position
+        # set origin position for layout
         origin = self.get_position()
-        # set up layout information
+        # get layout information based on type/name
         if self._name == "HUGE":
             asteroid_layout = constants.HUGE_ASTEROID_LAYOUT
         if self._name == "GIANT":
             asteroid_layout = constants.GIANT_ASTEROID_LAYOUT
-        # set up layout color info
+        # get layout color info
         asteroid_colors = [self.get_color()]
-        # generate parts list from layout
-        self._parts = self._generate_structure(
-            origin, self._velocity, asteroid_layout, asteroid_colors)
-        # add self to parts list
+
+        # generate structure from layout and store in parts list
+        self._parts = self._generate_structure(origin, self._velocity, asteroid_layout, asteroid_colors)
+        # add self to parts list as the center piece of the structure
         self._parts.append(self)
 
     def _create_asteroid_when_destroyed(self, asteroidtype):
         """
-        Creates the structure of actors to form a huge asteroid
-        self._parts
+        Creates a smaller asteroid at this asteroids position (slightly randomized) when it gets blown up.
         """
+        # find a slightly randomized position
         x = self._position.get_x() + random.randint(-1, 1) * constants.CELL_SIZE
         y = self._position.get_y() + random.randint(-1, 0) * constants.CELL_SIZE
         position = Point(x, y)
-        velocity = Point(random.randint(-1, 1) *
-                         constants.CELL_SIZE, 1 * constants.CELL_SIZE)
+        # make it move randomly horizontally
+        velocity = Point(random.randint(-1, 1) *constants.CELL_SIZE, 1 * constants.CELL_SIZE)
         asteroid = Asteroid(self._cast)
         asteroid.set_color(self._color)
         asteroid.set_position(position)
         asteroid.set_velocity(velocity)
+        # call it's set up type so it's attributes get applied
         asteroid.set_up_type(asteroidtype)
-        # returns it so we can add it to the cast "asteriods" group
+        # returns it so the calling method can add it to the cast "asteriods" group
         return asteroid
 
     def move_next(self):
-        """ (OVERRIDE) Moves the actor to its next position according to its velocity. Will wrap the position 
-        from one side of the screen to the other when it reaches the given maximum (X ONLY FOR LASER).
-
+        """ (OVERRIDE) Moves the actor to its next position according to its velocity. 
+        Will wrap the x position from one side of the screen to the other when it reaches the given maximum x.
         Args:
             max_x (int): The maximum x value.
         """
+        # if the move wait timer is up
         if self._move_timer == 0:
             # reset move timer
             self._move_timer = self._move_wait
 
-            # if asteroid is off screen
+            # check if asteroid is off screen
             if self._position.get_y() >= constants.MAX_Y + constants.CELL_SIZE:
                 # delete it
                 self._cast.remove_actor("asteroids", self)
             else:
-                # apply movement to all parts
+                # otherwise apply movement to asteroid (all parts)
                 for part in self._parts:
-                    x = (part._position.get_x() +
-                         self._velocity.get_x()) % constants.MAX_X
+                    # wrap x
+                    x = (part._position.get_x() + self._velocity.get_x()) % constants.MAX_X
                     y = (part._position.get_y() + self._velocity.get_y())
-                    # move part
+                    # apply movement
                     part._position = Point(x, y)
-
         else:
             # waiting a few frames before moving again
             self._move_timer -= 1

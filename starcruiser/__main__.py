@@ -1,5 +1,4 @@
 import constants
-
 from game.casting.cast import Cast
 from game.scripting.script import Script
 from game.scripting.draw_actors_action import DrawActorsAction
@@ -11,25 +10,26 @@ from game.shared.color import Color
 from game.shared.point import Point
 from game.scripting.handle_menu_system import handleMenuSystem
 
-
 def main():
 
     # create the cast
     cast = Cast()
 
-    # start the game
+    # create services
     keyboard_service = KeyboardService()
     audio_service = AudioService()
     video_service = VideoService(audio_service)
-    
 
+    # create actions
     draw_actors_instance = DrawActorsAction(video_service)
+    handle_menu_system = handleMenuSystem(keyboard_service, draw_actors_instance, video_service, audio_service)
 
+    # create scripts and start running menu system
     script = Script()
-    script.add_action("update", handleMenuSystem(
-        keyboard_service, draw_actors_instance, video_service, audio_service))
+    script.add_action("update", handle_menu_system)
     script.add_action("output", draw_actors_instance)
 
+    # create director to execute scripts
     director = Director(video_service)
     director.start_game(cast, script)
 

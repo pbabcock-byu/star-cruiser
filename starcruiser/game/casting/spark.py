@@ -13,7 +13,10 @@ class Spark(Actor):
     The responsibility of Explosion is to animate then disappear
 
     Attributes:
-
+        bright (int): starting brightness value 255=white 0=black
+        dim_speed (int): how quickly the brightness of the spark fades
+        speed (float): how fast the spark moves
+        direction (int): direction in degress the spark is going to move
     """
 
     def __init__(self, cast):
@@ -31,23 +34,29 @@ class Spark(Actor):
         self._direction = radians(direction)
 
     def move_next(self):
-        """ (OVERRIDE) moves sparks and destroys when outside window
+        """ (OVERRIDE) moves sparks and destroys when outside window or brightness is zero
         """
+        # if spark goes outside the screen or brightness is zero
         if self._position._x >= constants.MAX_X or self._position._x <= 0 or self._position._y <= 0 or self._position._y >= constants.MAX_Y or self._bright <= 0:
-            # after animation is complete delete ourself
+            # delete it
             self._cast.remove_actor("sparks", self)
         else:
-
+            
+            # calculate relative x/y movement based on direction and speed
             self._velocity._x = self._speed * cos(self._direction)
             self._velocity._y = self._speed * sin(self._direction)
 
-            # move
+            # apply movement
             x = round(self._position.get_x() + self._velocity.get_x())
             y = round(self._position.get_y() + self._velocity.get_y())
             self._position = Point(x, y)
 
-            # dim over time
+            # dim spark brightness over time
             self._bright -= self._dim_speed
+            # if less than zero
             if(self._bright < 0):
+                # avoid error
                 self._bright = 0
+                
+            # apply color
             self.set_color(Color(self._bright, self._bright, self._bright))
