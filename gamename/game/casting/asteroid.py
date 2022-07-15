@@ -32,6 +32,10 @@ class Asteroid(Actor):
         self._move_wait = 4
         self._move_timer = 0
 
+        # for audio
+        self._hit_sound = "ast-hit"
+        self._exp_sound = "ast-hit-sml"
+
         # for building out larger asteroid structures
         self._parts = [self]
 
@@ -44,6 +48,20 @@ class Asteroid(Actor):
             string: The type.
         """
         return self._name
+
+    def get_hit_sound(self):
+        """Gets the Asteriod's hit sound
+        Returns:
+            string: The sound string for audio service
+        """
+        return self._hit_sound
+
+    def get_exp_sound(self):
+        """Gets the Asteriod's hit sound
+        Returns:
+            string: The sound string for audio service
+        """
+        return self._exp_sound       
 
     def get_health(self):
         return self._health
@@ -102,6 +120,11 @@ class Asteroid(Actor):
             # remove ourselves
             self._cast.remove_actor("asteroids", self)
 
+            # return whether we blew up so handle collisions can play sound
+            return True
+        else:
+            return False
+
     def set_up_type(self, type):
         """Updates Asteriod's size.
         Args:
@@ -116,6 +139,8 @@ class Asteroid(Actor):
         self._points = asteroid_type_info["points"]
         self._move_wait = asteroid_type_info["movewait"]()
         self.set_color(asteroid_type_info["color"])
+        self._hit_sound = asteroid_type_info["hit-sound"]
+        self._exp_sound = asteroid_type_info["destroy-snd"]
 
         # update movement, and structure based on name
         # movement

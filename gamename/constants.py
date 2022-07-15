@@ -36,12 +36,31 @@ MAXSHIELDS = 40
 STARTSHEILDS = 20
 LOWSHIELDS = 5
 
-# Sound
-SHIPFIRE_SOUND = "gamename\game\sounds\sf_laser_15.mp3"
-ASTEROIDSEXPLOSION_SOUND = ""
-SHIPSEXPLOSION_SOUND = "gamename\game\sounds\largeexplosion1.mp3"
-LOWSHIELDSWARNING_SOUND = "gamename\game\sounds\warningprimaryshieldsfailing_ep.mp3"
-GAMEOVER_SOUND = ""
+# SOUND - - - - - - -
+# ship
+SHIP_FIRE_SOUND = "gamename/game/sounds/lasr.mp3"
+SHIP_HIT_SOUND = "gamename/game/sounds/ship-hit.mp3"
+SHIP_EXPLOSION_SOUND = "gamename/game/sounds/ship-exp.mp3"
+# Asteroids
+ASTEROIDS_HIT_SOUND = "gamename/game/sounds/ast-hit.mp3"
+ASTEROIDS_HIT_SML_SOUND = "gamename/game/sounds/ast-hit-sml.mp3"
+ASTEROIDS_HIT_LRG_SOUND = "gamename/game/sounds/ast-hit-lrg.mp3"
+ASTEROIDS_HIT_GIANT_SOUND = "gamename/game/sounds/ast-hit-giant.mp3"
+ASTEROIDS_HIT_GIANT_EXP_SOUND = "gamename/game/sounds/ast-hit-giant-exp.mp3"
+# menu
+MENU_SELECT_SOUND = "gamename/game/sounds/menu-selct.mp3"
+MENU_START_SOUND = "gamename/game/sounds/menu-start.mp3"
+ENTER_INITIAL_SOUND = "gamename/game/sounds/entr-initial.mp3"
+NEW_HIGHSCORE_SOUND = "gamename/game/sounds/new-hscore.mp3"
+# game
+GAMEOVER_SOUND = "gamename/game/sounds/gm-over.mp3"
+NEW_STAGE_SOUND = "gamename/game/sounds/new-stge.mp3"
+UPGRADE_SOUND = "gamename/game/sounds/upgrd.mp3"
+LOW_SHIELDS_WARNING_SOUND = "gamename/game/sounds/shields-low.mp3"
+# music
+MUSIC_MENU_SOUND = "gamename/game/sounds/upgrd.mp3"
+MUSIC_GAMEPLAY_SOUND = "gamename/game/sounds/upgrd.mp3"
+
 
 # Ship Layout
 SHIP_LAYOUT = [["+", 0, 0, 0], ["A", 0, 1, 0], ["H", 0, 2, 1], [
@@ -63,7 +82,9 @@ ASTEROID_TYPES_LIST = [
         "health": 1,
         "points": 1,
         "movewait": lambda: random.choice([2, 3, 4]),
-        "color": asteroid_color()
+        "color": asteroid_color(),
+        "hit-sound": "ast-hit",
+        "destroy-snd": "ast-hit-sml"
     },
     {
         "name": "MED",
@@ -72,7 +93,9 @@ ASTEROID_TYPES_LIST = [
         "health": 1,
         "points": 1,
         'movewait': lambda: random.choice([3, 4]),
-        "color": asteroid_color()
+        "color": asteroid_color(),
+        "hit-sound": "ast-hit",
+        "destroy-snd": "ast-hit-sml"
     },
     {
         "name": "LRG",
@@ -81,7 +104,9 @@ ASTEROID_TYPES_LIST = [
         "health": 2,
         "points": 2,
         'movewait': lambda: random.choice([4, 5]),
-        "color": asteroid_color()
+        "color": asteroid_color(),
+        "hit-sound": "ast-hit",
+        "destroy-snd": "ast-hit-lrg"
     },
     {
         "name": "SML-xmove",
@@ -89,8 +114,10 @@ ASTEROID_TYPES_LIST = [
         "damage": 2,
         "health": 1,
         "points": 3,
-        'movewait': lambda: random.choice([1, 2]),
-        "color": asteroid_color()
+        'movewait': lambda: random.choice([2, 3]),
+        "color": asteroid_color(),
+        "hit-sound": "ast-hit",
+        "destroy-snd": "ast-hit-lrg"
     },
     {
         "name": "HUGE",
@@ -99,7 +126,9 @@ ASTEROID_TYPES_LIST = [
         "health": 3,
         "points": 4,
         'movewait': lambda: random.choice([4, 5, 6]),
-        "color": asteroid_color()
+        "color": asteroid_color(),
+        "hit-sound": "ast-hit",
+        "destroy-snd": "ast-hit-giant"
     },
     {
         "name": "GIANT",
@@ -108,7 +137,9 @@ ASTEROID_TYPES_LIST = [
         "health": 5,
         "points": 6,
         'movewait': lambda: random.choice([5, 6]),
-        "color": asteroid_color()
+        "color": asteroid_color(),
+        "hit-sound": "ast-hit",
+        "destroy-snd": "ast-hit-giant"
     }]
 
 

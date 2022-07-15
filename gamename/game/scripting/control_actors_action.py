@@ -5,7 +5,6 @@ from game.casting.actor import Actor
 from game.casting.laser import Laser
 # need this module to play sounds
 from playsound import playsound
-import pyray as pyray
 
 
 class ControlActorsAction(Action):
@@ -18,20 +17,19 @@ class ControlActorsAction(Action):
         _keyboard_service (KeyboardService): An instance of KeyboardService.
     """
 
-    def __init__(self, keyboard_service):
+    def __init__(self, keyboard_service, audio_service):
         """Constructs a new ControlActorsAction using the specified KeyboardService.
 
         Args:
             keyboard_service (KeyboardService): An instance of KeyboardService.
         """
         self._keyboard_service = keyboard_service
+        self._audio_service = audio_service
+        
         self._key_fire = False
         self._key_fire_timer = 0
 
         self._player_direction = Point(0, 0)
-
-        # this is to initialize the audion device
-        pyray.init_audio_device()
 
     def _handle_player_movement(self, cast):
         """Executes the control actors action to control player movement
@@ -62,12 +60,8 @@ class ControlActorsAction(Action):
             # if player presses the space bar
             if self._keyboard_service.is_key_down('space') and self._key_fire == False:
 
-                # this plays the sound bype
-                #playsound(constants.SHIPFIRE_SOUND, block=False)
-                lazer = pyray.load_sound(constants.SHIPFIRE_SOUND)
-                pyray.play_sound(lazer)
-                print(
-                    f'playing sound using  playsound: {constants.SHIPFIRE_SOUND}')
+                # PLAY LASER SOUND HERE
+                self._audio_service.play_sound("laser")
 
                 # set key fire so only one bullet is fired at a time
                 self._key_fire = True

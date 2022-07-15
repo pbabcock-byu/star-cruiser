@@ -20,11 +20,12 @@ class HandleCollisionsAction(Action):
         _is_game_over (boolean): Whether or not the game is over.
     """
 
-    def __init__(self, keyboard_service, handle_menu_system):
+    def __init__(self, keyboard_service, handle_menu_system, audio_service):
         """Constructs a new HandleCollisionsAction."""
 
         self._keyboard_service = keyboard_service
         self._handle_menu_system = handle_menu_system
+        self._audio_service = audio_service
 
         self._is_game_over = False
         self._game_over_timer = 0
@@ -39,7 +40,6 @@ class HandleCollisionsAction(Action):
         """
         if not self._is_game_over:
 
-            # self._handle_snakes_collision(cast)
             self._handle_laser_enemy_collision(cast, ["asteroids"])
             self._handle_player_enemy_collision(cast, ["asteroids"])
             self._handle_player_upgrade_collision(cast)
@@ -71,10 +71,9 @@ class HandleCollisionsAction(Action):
         """
         lasers = cast.get_actors("lasers")
         hit = False
+        destroyed = False
         # for every laser
         for laser in lasers:
-            if hit:
-                break
             # loop through every group in the groups list
             for group in groups:
                 if hit:
@@ -101,7 +100,13 @@ class HandleCollisionsAction(Action):
                             cast.add_actor("explosions", explosion)
 
                             # apply damage from laser to enemy health
-                            enemy.remove_health(laser.get_damage())
+                            destroyed = enemy.remove_health(laser.get_damage())
+                            if destroyed:
+                                # play enemy destroy sound
+                                self._audio_service.play_sound(enemy.get_exp_sound())                        
+                            else:
+                                # play enemy hit sound
+                                self._audio_service.play_sound(enemy.get_hit_sound())
                             # delete the laser
                             cast.remove_actor("lasers", laser)
                             # break all loops
@@ -161,16 +166,17 @@ class HandleCollisionsAction(Action):
                                 if shields.get_points() < 0:
                                     # explode player, game over
                                     self._is_game_over = True
-                                    playsound(
-                                        constants.SHIPSEXPLOSION_SOUND, block=False)
                                     ship.set_is_dead(True)
                                 else:
                                     # set ship is hurt to true
                                     ship.set_is_hurt(True)
 
-                                    if shields.get_points() <= 10:
-                                        playsound(
-                                            constants.LOWSHIELDSWARNING_SOUND, block=False)
+                                    # play ship hit sound
+                                    self._audio_service.play_sound("ship-hit")
+
+                                    if shields.get_points() <= 4:
+                                        # play low shields warning sound
+                                        self._audio_service.play_sound("low-shields")
 
                                 # break the current loop
                                 break
@@ -182,6 +188,11 @@ class HandleCollisionsAction(Action):
             cast (Cast): The cast of Actors in the game.
         """
         if self._is_game_over:
+
+            # play game over sound
+            self._audio_service.play_sound("game-over")
+            # play ship explode 
+            self._audio_service.play_sound("ship-exp")
 
             # tell the menu system it's game over
             self._handle_menu_system.set_game_over(True)
@@ -231,6 +242,8 @@ class HandleCollisionsAction(Action):
                     shields = cast.get_first_actor("shields")
                     shields.add_points(10)
                     cast.remove_actor("upgrades", upgrade)
+                    # play upgrade sound
+                    self._audio_service.play_sound("upgrade")
 
     def _create_sparks(self, cast, amount, position, speed_min, speed_max, dir, dir_range):
         """"Create a certain number of sparks at a certain location between min/max speed and min/max direction"""

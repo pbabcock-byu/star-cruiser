@@ -20,7 +20,7 @@ class handleMenuSystem(Action):
         _keyboard_service (KeyboardService): An instance of KeyboardService.
     """
 
-    def __init__(self, keyboard_service, draw_actors_instance, video_service):
+    def __init__(self, keyboard_service, draw_actors_instance, video_service, audio_service):
         """Constructs a new handleMenuSystem using the specified KeyboardService.
 
         Args:
@@ -29,6 +29,8 @@ class handleMenuSystem(Action):
         self._keyboard_service = keyboard_service
         self._draw_actors_instance = draw_actors_instance
         self._video_service = video_service
+        self._audio_service = audio_service
+        # store class instances for game play
         self._control_actions_action = 0
         self._move_actors_action = 0
         self._handle_collision_action = 0
@@ -161,11 +163,11 @@ class handleMenuSystem(Action):
                     if try_letter_key != False:
                         # a letter key has been pressed
                         self._key_is_pressed = True
-                        self._initials_actors[self._initial_highlighted].set_text(
-                            try_letter_key.upper())
-                        self._initials[self._initial_highlighted] = try_letter_key.upper(
-                        )
+                        self._initials_actors[self._initial_highlighted].set_text(try_letter_key.upper())
+                        self._initials[self._initial_highlighted] = try_letter_key.upper()
                         self._initial_highlighted += 1
+                        # play initial enter sound
+                        self._audio_service.play_sound("enter-initial")
 
                     elif self._keyboard_service.is_key_down('right'):
                         self._key_is_pressed = True
@@ -201,6 +203,8 @@ class handleMenuSystem(Action):
                         self._highscore_menu_values[1] = ""
                         self._update_menu_items(
                             cast, self._highscore_menu_values, self._highscore_menu_heights)
+                        # play menu select sound
+                        self._audio_service.play_sound("menu-select")
 
                 else:
                     try_letter_key = self._keyboard_service.is_any_letter_key_down()
@@ -225,6 +229,8 @@ class handleMenuSystem(Action):
                         self._menu_state = "start"
                         self._menu_item_highlighted = 0  # highlight the "ENTER TO START" menu item
                         self._update_menu_item_highlighted()
+                        # play menu select sound
+                        self._audio_service.play_sound("menu-select")
 
                 else:
                     if self._keyboard_service.is_key_up('enter'):
@@ -236,15 +242,21 @@ class handleMenuSystem(Action):
                     self._key_is_pressed = True
                     if self._menu_state == "start":
                         if self._menu_item_highlighted == 0:
+                            # START THE GAME
                             self._start_game(cast, script)
                             # close the menu system
                             self._close_menu(cast)
+                            # play start sound
+                            self._audio_service.play_sound("menu-start")
+
                         elif self._menu_item_highlighted == 1:
                             self._menu_state = "credits"
                             self._menu_item_highlighted = 2  # highlight the "BACK" menu item
                             self._update_menu_item_highlighted()
                             self._update_menu_items(
                                 cast, self._credits_menu_values, self._credits_menu_heights)
+                            # play menu select sound
+                            self._audio_service.play_sound("menu-select")
                         elif self._menu_item_highlighted == 2:
                             # exit game
                             self._video_service.close_window()
@@ -258,11 +270,16 @@ class handleMenuSystem(Action):
                             # update menu to start menu
                             self._update_menu_items(
                                 cast, self._start_menu_values, self._start_menu_heights)
+                            # play menu select sound
+                            self._audio_service.play_sound("menu-select")
 
                     elif self._menu_state == "none":
 
                         if self._game_over != True:
                             # as long as it's not game over enable pausing
+                            # play menu sound
+                            self._audio_service.play_sound("menu-select")
+
                             if self._paused == False:
                                 self._paused = True
                                 # PAUSE GAME
@@ -291,11 +308,17 @@ class handleMenuSystem(Action):
                             self._menu_item_highlighted - 1) % 3
                         self._update_menu_item_highlighted()
 
+                        # play menu select sound
+                        self._audio_service.play_sound("menu-select")
+
                     if self._keyboard_service.is_key_down('down'):
                         self._key_is_pressed = True
                         self._menu_item_highlighted = (
                             self._menu_item_highlighted + 1) % 3
                         self._update_menu_item_highlighted()
+
+                        # play menu select sound
+                        self._audio_service.play_sound("menu-select")
 
             else:
                 if self._keyboard_service.is_key_up('enter') and self._keyboard_service.is_key_up('up') and self._keyboard_service.is_key_up('down'):
@@ -354,10 +377,10 @@ class handleMenuSystem(Action):
         """Start the game by setting scripts to run and creating instances of classes"""
         # create instances of actions
         self._control_actions_action = ControlActorsAction(
-            self._keyboard_service)
+            self._keyboard_service, self._audio_service)
         self._move_actors_action = MoveActorsAction()
         self._handle_collision_action = HandleCollisionsAction(
-            self._keyboard_service, self)
+            self._keyboard_service, self, self._audio_service)
 
         # add scripts to run
         script.add_action(
