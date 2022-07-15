@@ -19,8 +19,9 @@ def main():
 
     # start the game
     keyboard_service = KeyboardService()
-    video_service = VideoService()
     audio_service = AudioService()
+    video_service = VideoService(audio_service)
+    
 
     draw_actors_instance = DrawActorsAction(video_service)
 

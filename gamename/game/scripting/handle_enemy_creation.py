@@ -19,8 +19,10 @@ class HandleEnemyCreation(Action):
         _game_seconds (double): Keeps track of how many seconds the game has been running
     """
 
-    def __init__(self):
+    def __init__(self, audio_service):
         """Constructs a new HandleEnemyCreation."""
+        self._audio_service = audio_service
+
         self._is_game_over = False
         self._wait_spawn = 0
         self._game_stage = ""
@@ -387,6 +389,8 @@ class HandleEnemyCreation(Action):
                         message.set_text(self._game_stage)
                         message.set_position(position)
                         cast.add_actor("stage messages", message)
+                        # play stage start sound
+                        self._audio_service.play_sound("new-stage")
         # if we are past the duration of this stage
         if self._stage_seconds > self._current_stage["delaystart"] + self._current_stage["duration"]:
             # reset stage timer

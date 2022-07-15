@@ -7,16 +7,19 @@ class VideoService:
     on the screen.
     """
 
-    def __init__(self, debug=False):
+    def __init__(self, audio_service, debug=False):
         """Constructs a new VideoService using the specified debug mode.
 
         Args:
             debug (bool): whether or not to draw in debug mode.
         """
+        self._audio_service = audio_service
         self._debug = debug
+        
 
     def close_window(self):
         """Closes the window and releases all computing resources."""
+        self._audio_service.release()
         pyray.close_window()
 
     def clear_buffer(self):

@@ -93,17 +93,26 @@ class handleMenuSystem(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
+        if not self._game_over:
+            if self._menu_state == "start"  or self._menu_state == "credits": 
+                # play game music
+                self._audio_service.set_music("menu-music")
+
+            if self._menu_state == "none":
+                # play game menu
+                self._audio_service.set_music("game-music")
+
         if self._menu_state != "none" and self._menu_populated == False:
             # set to true
             self._menu_populated = True
-
+            
             if self._menu_state == "start":
                 # update menu to start menu
                 self._update_menu_items(
                     cast, self._start_menu_values, self._start_menu_heights)
                 # create game title
                 position = Point(int(constants.MAX_X / 2),
-                                 int(constants.MAX_Y * 0.1))
+                                 int(constants.MAX_Y * 0.2))
                 # create a game over message at that position
                 title = Actor()
                 title.set_text("STAR CRUISER 5000")
@@ -128,6 +137,8 @@ class handleMenuSystem(Action):
                     # select none of the menu items
                     self._menu_item_highlighted = -1
                     self._initial_highlighted = 0
+                    # play sound made it to high score
+                    self._audio_service.play_sound("new-highscore")
                 else:
                     # do not display enter initials
                     self._highscore_menu_values[0] = "You did not get a high score."
@@ -223,6 +234,8 @@ class handleMenuSystem(Action):
                         self._initials = ["A", "A", "A"]
                         self._initials_actors = []
                         self._initial_highlighted = 0
+                        # reset game over
+                        self._game_over = False
                         # reset menu
                         self._close_menu(cast)
                         # reopen start menu
@@ -392,7 +405,7 @@ class handleMenuSystem(Action):
         if initialStart == True:
 
             # enemy creator remains persistent
-            self._handle_enemy_creation_action = HandleEnemyCreation()
+            self._handle_enemy_creation_action = HandleEnemyCreation(self._audio_service)
             script.add_action("update", self._handle_enemy_creation_action)
 
             # create player ship

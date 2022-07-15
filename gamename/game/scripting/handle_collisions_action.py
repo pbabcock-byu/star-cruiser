@@ -189,13 +189,16 @@ class HandleCollisionsAction(Action):
         """
         if self._is_game_over:
 
+            # tell the menu system it's game over
+            self._handle_menu_system.set_game_over(True)
+
+            # stop game music
+            self._audio_service.set_music("none")
             # play game over sound
             self._audio_service.play_sound("game-over")
             # play ship explode 
             self._audio_service.play_sound("ship-exp")
 
-            # tell the menu system it's game over
-            self._handle_menu_system.set_game_over(True)
 
             # get center screen position
             x = int(constants.MAX_X / 2)

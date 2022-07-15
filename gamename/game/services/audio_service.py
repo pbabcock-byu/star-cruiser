@@ -24,7 +24,8 @@ class AudioService:
         self._sounds['ast-hit-sml'] = pyray.load_sound(constants.ASTEROIDS_HIT_SML_SOUND)
         self._sounds['ast-hit-lrg'] = pyray.load_sound(constants.ASTEROIDS_HIT_LRG_SOUND)
         self._sounds['ast-hit-giant'] = pyray.load_sound(constants.ASTEROIDS_HIT_GIANT_SOUND)
-        self._sounds['ast-hit-exp'] = pyray.load_sound(constants.ASTEROIDS_HIT_GIANT_EXP_SOUND)
+        self._sounds['ast-exp-huge'] = pyray.load_sound(constants.ASTEROIDS_HUGE_EXP_SOUND)
+        self._sounds['ast-exp-giant'] = pyray.load_sound(constants.ASTEROIDS_GIANT_EXP_SOUND)
         # menu
         self._sounds['menu-select'] = pyray.load_sound(constants.MENU_SELECT_SOUND)
         self._sounds['menu-start'] = pyray.load_sound(constants.MENU_START_SOUND)
@@ -39,7 +40,47 @@ class AudioService:
         self._sounds['menu-music'] = pyray.load_sound(constants.MUSIC_MENU_SOUND)
         self._sounds['game-music'] = pyray.load_sound(constants.MUSIC_GAMEPLAY_SOUND)
 
+    
+    def release(self):
+        self.unload_sounds()
+        pyray.close_audio_device()
+        
+    def unload_sounds(self):
+        for sound in self._sounds.values():
+            pyray.unload_sound(sound)
+        self._sounds.clear()
+
     def play_sound(self, sound):
         """ plays sound using string and looking it up in _sounds dictionary"""
         pyray.play_sound(self._sounds[sound])
-        print(sound)
+
+    def set_music(self, music):
+        """ plays music using string and looking it up in _sounds dictionary
+            stops any other songs playing"""
+
+        if music == "menu-music":
+            # stop current music playing if any
+            if pyray.is_sound_playing(self._sounds["game-music"]):
+                pyray.stop_sound(self._sounds["game-music"])
+            # play correct music if it's not already 
+            if not pyray.is_sound_playing(self._sounds["menu-music"]):
+                pyray.play_sound(self._sounds["menu-music"])
+                
+        if music == "game-music":
+            # stop current music playing if any
+            if pyray.is_sound_playing(self._sounds["menu-music"]):
+                pyray.stop_sound(self._sounds["menu-music"])
+            # play correct music if it's not already 
+            if not pyray.is_sound_playing(self._sounds["game-music"]):
+                pyray.play_sound(self._sounds["game-music"])
+
+        if music == "none":
+            # stop any music playing
+            if pyray.is_sound_playing(self._sounds["menu-music"]):
+                pyray.stop_sound(self._sounds["menu-music"])
+            # stop any music playing
+            if pyray.is_sound_playing(self._sounds["game-music"]):
+                pyray.stop_sound(self._sounds["game-music"])
+
+
+        
