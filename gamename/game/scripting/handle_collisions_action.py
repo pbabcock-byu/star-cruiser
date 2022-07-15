@@ -161,6 +161,8 @@ class HandleCollisionsAction(Action):
                                 if shields.get_points() < 0:
                                     # explode player, game over
                                     self._is_game_over = True
+                                    playsound(
+                                        constants.SHIPSEXPLOSION_SOUND, block=False)
                                     ship.set_is_dead(True)
                                 else:
                                     # set ship is hurt to true
