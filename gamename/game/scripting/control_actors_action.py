@@ -5,6 +5,7 @@ from game.casting.actor import Actor
 from game.casting.laser import Laser
 # need this module to play sounds
 from playsound import playsound
+import pyray as pyray
 
 
 class ControlActorsAction(Action):
@@ -28,6 +29,7 @@ class ControlActorsAction(Action):
         self._key_fire_timer = 0
 
         self._player_direction = Point(0, 0)
+        pyray.init_audio_device()
 
     def _handle_player_movement(self, cast):
         """Executes the control actors action to control player movement
@@ -59,7 +61,9 @@ class ControlActorsAction(Action):
             if self._keyboard_service.is_key_down('space') and self._key_fire == False:
 
                 # this plays the sound bype
-                playsound(constants.SHIPFIRE_SOUND, block=False)
+                #playsound(constants.SHIPFIRE_SOUND, block=False)
+                lazer = pyray.load_sound(constants.SHIPFIRE_SOUND)
+                pyray.play_sound(lazer)
                 print(
                     f'playing sound using  playsound: {constants.SHIPFIRE_SOUND}')
 
