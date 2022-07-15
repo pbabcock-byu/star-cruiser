@@ -250,20 +250,25 @@ class HandleCollisionsAction(Action):
         parts = ship.get_parts()
         # get list of all upgrades
         upgrades = cast.get_actors("upgrades")
+
         # for every upgrade
         for upgrade in upgrades:
             # for every part in ship
             for part in parts:
-                # see if part position matches upgrade position
-                if part.get_position().equals(upgrade.get_position()):
-                    # get reference to shields
-                    shields = cast.get_first_actor("shields")
-                    # add points (apply upgrade)
-                    shields.add_points(10)
-                    # remove that upgrade from screen
-                    cast.remove_actor("upgrades", upgrade)
-                    # play upgrade sound
-                    self._audio_service.play_sound("upgrade")
+                # see if part position x matches upgrade position x
+                if part.get_position().get_x() == upgrade.get_position().get_x():
+                    # if we are within a certain y distance consider it a collision
+                    if abs(part.get_position().get_y() - upgrade.get_position().get_y()) < 15:
+                        # get reference to shields
+                        shields = cast.get_first_actor("shields")
+                        # add points (apply upgrade)
+                        shields.add_points(10)
+                        # remove that upgrade from screen
+                        cast.remove_actor("upgrades", upgrade)
+                        # play upgrade sound
+                        self._audio_service.play_sound("upgrade")
+                        # break loop so we don't count it twice
+                        break
 
     def _create_sparks(self, cast, amount, position, speed_min, speed_max, dir, dir_range):
         """"Create a certain number of sparks at a certain location between min/max speed and min/max direction

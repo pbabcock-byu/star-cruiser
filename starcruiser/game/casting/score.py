@@ -26,6 +26,7 @@ class Score(Actor):
         self._cast = cast
         self.make_upgrade()
 
+
     def get_points(self):
         return self._points
 
@@ -42,7 +43,7 @@ class Score(Actor):
         position = Point(random.randint(0, constants.COLUMNS)
                          * (constants.CELL_SIZE), 0)
         # set a velocity to move upward
-        velocity = Point(0, constants.CELL_SIZE)
+        velocity = Point(0, constants.CELL_SIZE * 0.25)
         text = "+"  # cross keyboard symbol (for health)
         color = constants.YELLOW
         # apply attributes to a new instance of laser
@@ -50,7 +51,8 @@ class Score(Actor):
         upgrade.set_position(position)
         upgrade.set_velocity(velocity)
         upgrade.set_text(text)
+        upgrade.set_font_size(25)
         upgrade.set_color(color)
-        upgrade.set_wait_amount(4)
+
         # add laser to the "upgrades" cast
         self._cast.add_actor("upgrades", upgrade)

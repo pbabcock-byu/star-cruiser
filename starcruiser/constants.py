@@ -36,6 +36,8 @@ MAXSHIELDS = 40
 STARTSHEILDS = 20
 LOWSHIELDS = 5
 
+HIGHSCORE_FILE = "starcruiser/game/data/highscores.txt"
+
 # SOUNDS - - - - - - -
 SOUNDS_FOLDER = "starcruiser/game/sounds/"
 # ship

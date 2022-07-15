@@ -116,9 +116,9 @@ class handleMenuSystem(Action):
         # handle music
         self._handle_music()
         # handle menu populating
-        self._handle_menu_populating(cast)
+        self._handle_menu_populating(cast, script)
         # handle checking for keyboard input when displaying highscore table
-        self._handle_highscore_input_checks(cast, script)
+        self._handle_highscore_input_checks(cast)
         # handle checking for keyboard input when dislpaying start or credits menu
         self._handle_start_and_credit_input_checks(cast, script)
 
@@ -278,6 +278,10 @@ class handleMenuSystem(Action):
                         # clamp backspace to stop at first initial
                         if self._initial_highlighted < 0:
                             self._initial_highlighted = 0
+                        # clamp typing to stop at last initial
+                        if self._initial_highlighted > 2:
+                            self._initial_highlighted = 2
+                        
 
                     if self._key_is_pressed == True:
                         # update which initials is highlighted if a key was pressed
@@ -560,7 +564,7 @@ class handleMenuSystem(Action):
         inserted = -1
 
         # load from file line by line into an array
-        with open("gamename/game/data/highscores.txt") as file:
+        with open(constants.HIGHSCORE_FILE) as file:
             lines = file.readlines()
             lines = [line.rstrip() for line in lines]
 
@@ -585,7 +589,7 @@ class handleMenuSystem(Action):
     def _save_highscore_data(self):
         """opens highscores.txt file and saves the current list of highscore strings line by line
         """
-        with open("gamename/game/data/highscores.txt", 'w') as file:
+        with open(constants.HIGHSCORE_FILE, 'w') as file:
             # save top five highscore strings in list
             for i in range(0, 5):
                 # if it's not blank

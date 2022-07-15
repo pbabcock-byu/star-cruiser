@@ -9,7 +9,7 @@ from game.services.audio_service import AudioService
 from game.shared.color import Color
 from game.shared.point import Point
 from game.scripting.handle_menu_system import handleMenuSystem
-
+  
 def main():
 
     # create the cast
