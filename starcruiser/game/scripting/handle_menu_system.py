@@ -258,6 +258,9 @@ class handleMenuSystem(Action):
                         self._initials_actors[self._initial_highlighted].set_text(try_letter_key.upper())
                         # cursor forward to highlight the next initial
                         self._initial_highlighted += 1
+                        # clamp typing to stop at last initial
+                        if self._initial_highlighted > 2:
+                            self._initial_highlighted = 2
                         # play initial enter sound
                         self._audio_service.play_sound("enter-initial")
 
@@ -278,9 +281,6 @@ class handleMenuSystem(Action):
                         # clamp backspace to stop at first initial
                         if self._initial_highlighted < 0:
                             self._initial_highlighted = 0
-                        # clamp typing to stop at last initial
-                        if self._initial_highlighted > 2:
-                            self._initial_highlighted = 2
                         
 
                     if self._key_is_pressed == True:
