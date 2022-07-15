@@ -29,6 +29,8 @@ class ControlActorsAction(Action):
         self._key_fire_timer = 0
 
         self._player_direction = Point(0, 0)
+
+        # this is to initialize the audion device
         pyray.init_audio_device()
 
     def _handle_player_movement(self, cast):
