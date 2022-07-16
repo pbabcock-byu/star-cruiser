@@ -26,9 +26,10 @@ class Upgrade(Actor):
         
     def set_type(self, type):
         self._type = type
-        
+        # change appearence based on type
+        if self._type == "gun-rapid":
+            self.set_text("}{")
 
-        
 
     def move_next(self):
         """ (OVERRIDE) moves sparks and destroys when outside window

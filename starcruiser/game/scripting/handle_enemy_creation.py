@@ -232,7 +232,7 @@ class HandleEnemyCreation(Action):
             reference to the new meteoroid
         """
         # how many times to try finding an empty position to create another anemy
-        tries = 10
+        tries = 20
         # used to track if the position is free or not
         free = True
         # start by selecting a random position to try

@@ -29,6 +29,7 @@ class ControlActorsAction(Action):
         # key press only vs key hold and laser timer
         self._key_fire = False
         self._key_fire_timer = 0
+        
         # stores player movement direction
         self._player_direction = Point(0, 0)
 
@@ -70,8 +71,22 @@ class ControlActorsAction(Action):
 
                 # set key fire so only one bullet is fired at a time
                 self._key_fire = True
+
                 # set timer to control how rapidly player can fire
-                self._key_fire_timer = 6
+                if ship.get_gun_type() == "single":
+                    self._key_fire_timer = 6
+
+                if ship.get_gun_type() == "rapid":
+                    self._key_fire_timer = 2
+                    # check if we've reached max shots
+                    if ship.get_upgrade_shots() < constants.GUN_UPGRADE_MAX_SHOTS["rapid"]:
+                        ship.set_upgrade_shots(ship.get_upgrade_shots() + 1)
+                    else:
+                        # reset to zero
+                        ship.set_upgrade_shots(0)
+                        ship.set_gun_type("single")
+
+
 
                 # get the position of the front of the ship (part zero)
                 ship_parts = ship.get_parts()
@@ -81,8 +96,12 @@ class ControlActorsAction(Action):
                 position = Point(ship_position.get_x(),
                                  ship_position.get_y() - 1 * constants.CELL_SIZE)
 
-                # set attributes of laser
+                # set attributes of laser (default green)
                 color = constants.GREEN
+                # set rapid fire laser color to red
+                if ship.get_gun_type() == "rapid":
+                    color = constants.RED
+
                 # velocity to move upward
                 velocity = Point(0, -constants.CELL_SIZE)
                 text = "^"

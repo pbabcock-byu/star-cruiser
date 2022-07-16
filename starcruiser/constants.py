@@ -29,6 +29,7 @@ BLUE = Color(5, 90, 255)
 ORANGE = Color(255, 190, 0)
 AQUA = Color(100, 255, 255)
 PINK = Color(255, 150, 150)
+PURPLE = Color(255, 0, 150)
 BREEN = Color(245, 120, 22)
 
 # Ship shields and damage
@@ -64,6 +65,14 @@ LOW_SHIELDS_WARNING_SOUND = f"{SOUNDS_FOLDER}shields-low.mp3"
 # music
 MUSIC_MENU_SOUND = f"{SOUNDS_FOLDER}music-menu.mp3"
 MUSIC_GAMEPLAY_SOUND = f"{SOUNDS_FOLDER}music-play.mp3"
+
+
+# UPGRADES  LIST [points required (int), upgrade type (string)]
+UPGRADE_LIST = [[100,"shield"],[200,"gun-rapid"], [300,"shield"], [400,"gun-rapid"], [500,"shield"]]
+
+GUN_UPGRADE_MAX_SHOTS = {
+                            "rapid": 50
+                        }
 
 
 # SHIP LAYOUT [text character, x, y, color reference]
@@ -127,7 +136,7 @@ ASTEROID_TYPES_LIST = [
         "health": 1,
         "points": 3,
         'movewait': lambda: random.choice([2, 3]),
-        "color": PINK,
+        "color": PURPLE,
         "hit-sound": "",
         "destroy-snd": "ast-hit-lrg"
     },
@@ -411,6 +420,75 @@ GAME_STAGES = [
                 "enemytypes": ["asteroid-medium"],
                 "waitspawn": 0.7,
                 "y_randomness": 5,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 1,
+                "duration": 2,
+                "stagedisplay": "Stage Seven"
+            },
+            {
+                "delaystart": 0,
+                "duration": 10,
+                "enemytypes": ["asteroid-small"],
+                "waitspawn": 0.4,
+                "y_randomness": 5,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 10,
+                "enemytypes": ["asteroid-medium"],
+                "waitspawn": 0.4,
+                "y_randomness": 5,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 10,
+                "enemytypes": ["asteroid-large", "asteroid-large"],
+                "waitspawn": 0.5,
+                "y_randomness": 8,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 1,
+                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
+                "waitspawn": 0.1,
+                "y_randomness": 0,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 1,
+                "enemytypes": ["asteroid-medium", "asteroid-medium", "asteroid-medium", "asteroid-medium", "asteroid-medium", "asteroid-medium"],
+                "waitspawn": 0.1,
+                "y_randomness": 0,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 1,
+                "enemytypes": ["asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small"],
+                "waitspawn": 0.1,
+                "y_randomness": 0,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 1,
+                "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
+                "waitspawn": 0.1,
+                "y_randomness": 0,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 0,
+                "duration": 1,
+                "enemytypes": ["asteroid-huge", "asteroid-huge", "asteroid-huge", "asteroid-huge", "asteroid-huge", "asteroid-huge"],
+                "waitspawn": 0.3,
+                "y_randomness": 0,
                 "stagedisplay": "none"
             },
             {

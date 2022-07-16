@@ -29,6 +29,9 @@ class Ship(Actor):
         self._is_hurt_timer = 0
         self._flash_color = constants.AQUA
         self._is_dead = False
+        # gun stuff
+        self._gun_type = "single" # ex: single, rapid, shotgun
+        self._upgrade_shots = 0
         
 
     def get_is_hurt(self):
@@ -36,6 +39,18 @@ class Ship(Actor):
 
     def get_is_dead(self):
         return self._is_dead
+
+    def set_gun_type(self,type):
+        self._gun_type = type
+
+    def get_gun_type(self):
+        return self._gun_type
+
+    def set_upgrade_shots(self, shots):
+        self._upgrade_shots = shots
+
+    def get_upgrade_shots(self):
+        return self._upgrade_shots
 
     def set_is_dead(self, is_dead):
         self._is_dead = is_dead

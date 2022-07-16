@@ -90,13 +90,25 @@ class HandleCollisionsAction(Action):
                     # loop through every part of this enemy
                     for enemypart in enemy._parts:
 
+                        # get corrected enemy position
+                        enemy_position = Point(enemypart.get_position().get_x() - enemypart.get_velocity().get_x(), enemypart.get_position().get_y())
+
                         # get laser position
                         laser_position = laser.get_position()
                         # also get it's last position just in case they jumped over eachother
                         laser_last_position = Point(laser.get_position().get_x(), laser.get_position().get_y()+constants.CELL_SIZE)
 
-                        # if enemy parts position is equal to lasers
+                        # assume false
+                        collision = False
+
                         if laser_position.equals(enemypart.get_position()) or laser_last_position.equals(enemypart.get_position()):
+                            collision = True
+
+                        if laser_position.equals(enemy_position) or laser_last_position.equals(enemy_position):
+                            collision = True
+
+                        # if enemy parts position is equal to lasers
+                        if collision:
 
                             # create an explosion at the lasers position
                             self._create_explosion(cast, laser_last_position)
@@ -261,8 +273,14 @@ class HandleCollisionsAction(Action):
                     if abs(part.get_position().get_y() - upgrade.get_position().get_y()) < 15:
                         # get reference to shields
                         shields = cast.get_first_actor("shields")
+
                         # add points (apply upgrade)
-                        shields.add_points(10)
+                        if upgrade.get_type() == "shield":
+                            shields.add_points(10)
+
+                        if upgrade.get_type() == "gun-rapid":
+                            ship.set_gun_type("rapid")
+
                         # remove that upgrade from screen
                         cast.remove_actor("upgrades", upgrade)
                         # play upgrade sound
