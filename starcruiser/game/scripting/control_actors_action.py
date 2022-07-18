@@ -76,10 +76,12 @@ class ControlActorsAction(Action):
                 if ship.get_gun_type() == "single":
                     self._key_fire_timer = 6
 
-                if ship.get_gun_type() == "rapid":
-                    self._key_fire_timer = 2
+                # if we are any other gun type, limit the number of shots
+                if ship.get_gun_type() != "single":
+                    # get the wait time for this gun type from constants
+                    self._key_fire_timer = constants.GUN_UPGRADE_ATTRIBUTES[ship.get_gun_type()][1]
                     # check if we've reached max shots
-                    if ship.get_upgrade_shots() < constants.GUN_UPGRADE_MAX_SHOTS["rapid"]:
+                    if ship.get_upgrade_shots() < constants.GUN_UPGRADE_ATTRIBUTES[ship.get_gun_type()][0]:
                         ship.set_upgrade_shots(ship.get_upgrade_shots() + 1)
                     else:
                         # reset to zero
@@ -98,23 +100,53 @@ class ControlActorsAction(Action):
 
                 # set attributes of laser (default green)
                 color = constants.GREEN
+                text = "^"
                 # set rapid fire laser color to red
                 if ship.get_gun_type() == "rapid":
                     color = constants.RED
+                    text = "|"
+
+                if ship.get_gun_type() == "shotgun":
+                    color = constants.PURPLE
+                    text = "!"
 
                 # velocity to move upward
                 velocity = Point(0, -constants.CELL_SIZE)
-                text = "^"
+                
+                def make_laser():
+                    # apply attributes to a new instance of laser
+                    laser = Laser(cast)
+                    laser.set_position(position)
+                    laser.set_velocity(velocity)
+                    laser.set_text(text)
+                    laser.set_color(color)
+                    return laser
 
-                # apply attributes to a new instance of laser
-                laser = Laser(cast)
-                laser.set_position(position)
-                laser.set_velocity(velocity)
-                laser.set_text(text)
-                laser.set_color(color)
-
+                laser = make_laser()
                 # add laser to the "lasers" cast
                 cast.add_actor("lasers", laser)
+
+                # if we are the shotgun type make two additional lasers
+                if ship.get_gun_type() == "shotgun":
+                    # increase the original lasers damage
+                    laser.set_damage(2)
+                    # get a location point one cell to the left
+                    position = Point(ship_position.get_x() - 1 * constants.CELL_SIZE,
+                                    ship_position.get_y()) 
+                    #make another laser
+                    laser = make_laser()
+                    laser.set_damage(2)
+                    # add laser to the "lasers" cast
+                    cast.add_actor("lasers", laser)
+
+                     # get a location point one cell to the right
+                    position = Point(ship_position.get_x() + 1 * constants.CELL_SIZE,
+                                    ship_position.get_y())   
+                    #make another laser
+                    laser = make_laser()   
+                    laser.set_damage(2)
+                    # add laser to the "lasers" cast
+                    cast.add_actor("lasers", laser)                        
 
         # handle rapid fire wait timer and key hold
         if self._key_fire == True:

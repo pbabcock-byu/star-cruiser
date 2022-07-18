@@ -281,6 +281,9 @@ class HandleCollisionsAction(Action):
                         if upgrade.get_type() == "gun-rapid":
                             ship.set_gun_type("rapid")
 
+                        if upgrade.get_type() == "gun-shotgun":
+                            ship.set_gun_type("shotgun")
+
                         # remove that upgrade from screen
                         cast.remove_actor("upgrades", upgrade)
                         # play upgrade sound

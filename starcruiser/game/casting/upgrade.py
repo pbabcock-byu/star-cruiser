@@ -28,6 +28,9 @@ class Upgrade(Actor):
         self._type = type
         # change appearence based on type
         if self._type == "gun-rapid":
+            self.set_text("><")
+        # change appearence based on type
+        if self._type == "gun-shotgun":
             self.set_text("}{")
 
 
