@@ -68,10 +68,12 @@ MUSIC_GAMEPLAY_SOUND = f"{SOUNDS_FOLDER}music-play.mp3"
 
 
 # UPGRADES  LIST [points required (int), upgrade type (string)]
-UPGRADE_LIST = [[100,"shield"],[200,"gun-rapid"], [300,"shield"], [400,"gun-rapid"], [500,"shield"]]
+UPGRADE_LIST = [[100,"shield"],[200,"gun-rapid"], [300,"shield"], [400,"gun-shotgun"], [500,"shield"], [600,"gun-rapid"]]
 
-GUN_UPGRADE_MAX_SHOTS = {
-                            "rapid": 50
+# GUN_UPGRADE_ATTRIBUTES "type": [max shots (int), wait time (int)]
+GUN_UPGRADE_ATTRIBUTES = {
+                            "rapid": [50,2],
+                            "shotgun": [30,8]
                         }
 
 
@@ -153,7 +155,7 @@ ASTEROID_TYPES_LIST = [
     },
     {
         "name": "GIANT",
-        "text": "★",
+        "text": "_",
         "damage": 6,
         "health": 5,
         "points": 6,
@@ -431,7 +433,7 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 10,
                 "enemytypes": ["asteroid-small"],
-                "waitspawn": 0.4,
+                "waitspawn": 0.3,
                 "y_randomness": 5,
                 "stagedisplay": "none"
             },
@@ -439,7 +441,7 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 10,
                 "enemytypes": ["asteroid-medium"],
-                "waitspawn": 0.4,
+                "waitspawn": 0.2,
                 "y_randomness": 5,
                 "stagedisplay": "none"
             },
@@ -447,7 +449,7 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 10,
                 "enemytypes": ["asteroid-large", "asteroid-large"],
-                "waitspawn": 0.5,
+                "waitspawn": 0.4,
                 "y_randomness": 8,
                 "stagedisplay": "none"
             },
