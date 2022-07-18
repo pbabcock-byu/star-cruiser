@@ -455,7 +455,7 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 1,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
-                "waitspawn": 0.1,
+                "waitspawn": 0.3,
                 "y_randomness": 0,
                 "stagedisplay": "none"
             },
@@ -463,7 +463,7 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 1,
                 "enemytypes": ["asteroid-medium", "asteroid-medium", "asteroid-medium", "asteroid-medium", "asteroid-medium", "asteroid-medium"],
-                "waitspawn": 0.1,
+                "waitspawn": 0.2,
                 "y_randomness": 0,
                 "stagedisplay": "none"
             },
@@ -471,7 +471,7 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 1,
                 "enemytypes": ["asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small", "asteroid-small"],
-                "waitspawn": 0.1,
+                "waitspawn": 0.2,
                 "y_randomness": 0,
                 "stagedisplay": "none"
             },
@@ -479,7 +479,7 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 1,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large", "asteroid-large"],
-                "waitspawn": 0.1,
+                "waitspawn": 0.3,
                 "y_randomness": 0,
                 "stagedisplay": "none"
             },
@@ -487,7 +487,7 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 1,
                 "enemytypes": ["asteroid-huge", "asteroid-huge", "asteroid-huge", "asteroid-huge", "asteroid-huge", "asteroid-huge"],
-                "waitspawn": 0.3,
+                "waitspawn": 0.5,
                 "y_randomness": 0,
                 "stagedisplay": "none"
             },
@@ -498,9 +498,9 @@ GAME_STAGES = [
             },
             {
                 "delaystart": 0,
-                "duration": 50,
+                "duration": 100,
                 "enemytypes": ["asteroid-small-xmove", "asteroid-giant"],
-                "waitspawn": 0.7,
+                "waitspawn": 0.8,
                 "y_randomness": 5,
                 "stagedisplay": "none"
             },
