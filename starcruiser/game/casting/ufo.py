@@ -181,7 +181,7 @@ class Ufo(Actor):
                         # add laser to the "lasers" cast
                         self._cast.add_actor("lasers", laser)
                         # wait before shooting again
-                        self._shoot_wait = 2
+                        self._shoot_wait = 3
                         # play ufo laser sound
                         self._audio_service.play_sound("ufo-laser")
 
