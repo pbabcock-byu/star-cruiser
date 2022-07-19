@@ -5,7 +5,7 @@ from game.casting.actor import Actor
 from game.scripting.action import Action
 from game.shared.point import Point
 from game.casting.asteroid import Asteroid
-
+from game.casting.ufo import Ufo
 
 class HandleEnemyCreation(Action):
     """
@@ -203,6 +203,10 @@ class HandleEnemyCreation(Action):
             enemy = self._make_asteriod(cast, 5)
             cast.add_actor("asteroids", enemy)
 
+        if enemy_type == "ufo":
+            enemy = self._make_ufo(cast)
+            cast.add_actor("ufos", enemy)
+
         # return enemy reference (zero if unsuccesful)
         return enemy
 
@@ -232,13 +236,14 @@ class HandleEnemyCreation(Action):
             reference to the new meteoroid
         """
         # how many times to try finding an empty position to create another anemy
-        tries = 20
+        tries = 10
         # used to track if the position is free or not
         free = True
         # start by selecting a random position to try
         x = random.randint(1, constants.COLUMNS - 1)
         y = random.randint(-5 - self.y_randomness, -5)
         position = Point(x, y)
+        position = position.scale(constants.CELL_SIZE)
 
         # keep trying (tries) n times for an empty spot
         while not free:
@@ -260,10 +265,10 @@ class HandleEnemyCreation(Action):
                 x = random.randint(1, constants.COLUMNS - 1)
                 y = random.randint(-5 - self.y_randomness, -5)
                 position = Point(x, y)
+                position = position.scale(constants.CELL_SIZE)
                 # then the loop will run again
 
         # once the loop breaks we will use the position
-        position = position.scale(constants.CELL_SIZE)
         velocity = Point(0, constants.CELL_SIZE)
         asteroid = Asteroid(cast)
         asteroid.set_position(position)
@@ -272,3 +277,25 @@ class HandleEnemyCreation(Action):
         asteroid.set_up_type(asteroidtype)
         # returns it so the calling method can add it to the cast "asteriods" group
         return asteroid
+
+    def _make_ufo(self, cast):
+        """Creates a new ufo at the top of the screen
+        Args:
+        Returns:
+            reference to the actor
+        """
+        # start by selecting a random position to try
+        x = random.randint(5, constants.COLUMNS - 5)
+        y = random.randint(0, 0)
+        position = Point(x, y)
+        position = position.scale(constants.CELL_SIZE)
+
+        # once the loop breaks we will use the position
+        velocity = Point(random.choice([-constants.CELL_SIZE,constants.CELL_SIZE]), 0)
+        ufo = Ufo(cast, self._audio_service)
+        ufo.set_position(position)
+        ufo.set_velocity(velocity)
+        # call set up to create body
+        ufo.set_up_ufo()
+        # returns it so the calling method can add it to the cast "asteriods" group
+        return ufo

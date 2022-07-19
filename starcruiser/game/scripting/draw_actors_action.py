@@ -56,6 +56,13 @@ class DrawActorsAction(Action):
             for asteroid in asteroids:
                 for part in asteroid.get_parts():
                     asteroid_parts.append(part)
+            # asteroids
+            ufo_parts = []
+            ufos = cast.get_actors("ufos")
+            # append all ufo parts into one list
+            for ufo in ufos:
+                for part in ufo.get_parts():
+                    ufo_parts.append(part)
             # explosions
             explosions = cast.get_actors("explosions")
             # sparks
@@ -82,6 +89,8 @@ class DrawActorsAction(Action):
             self._video_service.draw_actors(lasers)
             # draw asteroids
             self._video_service.draw_actors(asteroid_parts)
+            # draw ufos
+            self._video_service.draw_actors(ufo_parts)
             # draw explosions
             self._video_service.draw_actors(explosions)
             # draw explosions

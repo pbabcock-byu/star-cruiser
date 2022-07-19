@@ -44,8 +44,9 @@ class HandleCollisionsAction(Action):
         if not self._is_game_over:
 
             # run the collision checks for enemies, lasers, and upgrades
-            self._handle_laser_enemy_collision(cast, ["asteroids"])
-            self._handle_player_enemy_collision(cast, ["asteroids"])
+            self._handle_laser_enemy_collision(cast, ["asteroids","ufos"])
+            self._handle_player_enemy_collision(cast, ["asteroids","ufos"])
+            self._handle_player_lasers_collision(cast)
             self._handle_player_upgrade_collision(cast)
 
             # run this last in case we get game over in the player-enemy collision check above
@@ -200,6 +201,70 @@ class HandleCollisionsAction(Action):
                                 # break the loop
                                 break
 
+    def _handle_player_lasers_collision(self, cast):
+        """Checks if the ship has collided with an enemy laser and applies damage to shields.
+        Args:
+            cast (Cast): The cast of Actors in the game.
+        """
+        # get reference to ship
+        ship = cast.get_first_actor("ships")
+
+        # don't check if ships hurt timer is on
+        if ship.get_is_hurt() == False:
+
+            # get list of ship parts
+            parts = ship.get_parts()
+            # break for loops if there's a collision
+            hit = False
+
+            # loop through every part
+            for part in parts:
+                if hit: break
+
+                # loop through every enemy in this group
+                for laser in cast.get_actors("lasers"):
+                    if hit: break
+
+                    # if this ship part is colliding with this enemy part
+                    if part.get_position().equals(laser.get_position()):
+                        # set hit to true so we can break the loop and only apply one hit at a time
+                        hit = True
+
+                        # get reference to shields instance
+                        shields = cast.get_first_actor("shields")
+                        shields.add_points( - laser.get_damage())
+
+                        # create sparks that bounce off player ship
+                        self._create_sparks(cast, 20, part.get_position(), 5, 13, 270, 40)
+                    
+                        # if player is moving sideways send sparks sideways too
+                        if ship.get_velocity().get_x() > 0: # right
+                            self._create_sparks(cast, 20, part.get_position(), 10, 23, 350, 40)
+                        if ship.get_velocity().get_x() < 0: # left
+                            self._create_sparks(cast, 20, part.get_position(), 10, 23, 190, 40)
+
+                        # remove all the enemies health
+                        cast.remove_actor("lasers", laser)
+
+                        # if we have less than 0 shields now
+                        if shields.get_points() < 0:
+                            # explode player, game over
+                            self._is_game_over = True
+                            ship.set_is_dead(True)
+                        else:
+                            # set ship is hurt to true
+                            ship.set_is_hurt(True)
+                            # play ship hit sound
+                            self._audio_service.play_sound("ship-hit")
+                            # if we are low on shields
+                            if shields.get_points() <= 4:
+                                # play low shields warning sound
+                                self._audio_service.play_sound("low-shields")
+
+                        # break the loop
+                        break
+
+
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and explodes the ship.
         Args:
@@ -250,6 +315,8 @@ class HandleCollisionsAction(Action):
             ship.remove_parts()
             # delete all enemies
             cast.remove_actors("asteroids")
+            cast.remove_actors("lasers")
+            cast.remove_actors("ufos")
 
     def _handle_player_upgrade_collision(self, cast):
         """ When the player collides with an upgrade item, apply it's upgrade.

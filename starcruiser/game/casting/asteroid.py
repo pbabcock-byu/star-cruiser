@@ -209,7 +209,7 @@ class Asteroid(Actor):
             self._move_timer = self._move_wait
 
             # check if asteroid is off screen
-            if self._position.get_y() >= constants.MAX_Y + constants.CELL_SIZE:
+            if self._position.get_y() >= constants.MAX_Y - constants.CELL_SIZE * 2:
                 # delete it
                 self._cast.remove_actor("asteroids", self)
             else:

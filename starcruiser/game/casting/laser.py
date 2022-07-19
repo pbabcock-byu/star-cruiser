@@ -36,7 +36,7 @@ class Laser(Actor):
         x = (self._position.get_x() + self._velocity.get_x()) % constants.MAX_X
         y = (self._position.get_y() + self._velocity.get_y())
         # if laser goes off the top of the screen
-        if y <= 0:
+        if y <= 0 or y >= constants.MAX_Y:
             # delete it
             self._cast.remove_actor("lasers", self)
         else:

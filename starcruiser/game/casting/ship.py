@@ -87,6 +87,11 @@ class Ship(Actor):
                 # apply base move_next() method of Actor class
                 part.move_next()
             
+            # move ship origin point as well
+            x = (self._position.get_x() + self._velocity.get_x()) % constants.MAX_X
+            y = (self._position.get_y() + self._velocity.get_y()) % constants.MAX_Y
+            self._position = Point(x, y)
+
             # HANDLE ANIMATIONS - - - - - - - 
             # animate thrust (seventh part)
             if self._parts[7].get_text() == '*':
@@ -134,5 +139,7 @@ class Ship(Actor):
         # set origin position
         x = int(constants.MAX_X * 0.5)
         y = int(constants.MAX_Y - constants.CELL_SIZE * 8)
+
+        self.set_position(Point(x,y))
         # generate parts list based on layout
         self._parts = self._generate_structure(Point(x, y), Point(0, 0), constants.SHIP_LAYOUT, constants.SHIP_COLORS)

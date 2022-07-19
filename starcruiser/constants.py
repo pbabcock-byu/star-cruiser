@@ -14,7 +14,7 @@ MAX_X = 600  # COLUMNS * CELL_SIZE
 MAX_Y = 705  # ROWS * CELL_SIZE
 
 # Pyray window settings
-FRAME_RATE = 15
+FRAME_RATE = 18
 FONT_SIZE = 15
 CAPTION = "STAR CRUISER 5000 ✈"
 
@@ -26,7 +26,7 @@ YELLOW = Color(255, 255, 0)
 GREEN = Color(0, 255, 0)
 BROWN = Color(145, 20, 22)
 BLUE = Color(5, 90, 255)
-ORANGE = Color(255, 190, 0)
+ORANGE = Color(255, 140, 0)
 AQUA = Color(100, 255, 255)
 PINK = Color(255, 150, 150)
 PURPLE = Color(255, 0, 150)
@@ -52,6 +52,10 @@ ASTEROIDS_HIT_LRG_SOUND = f"{SOUNDS_FOLDER}ast-hit-lrg.mp3"
 ASTEROIDS_HIT_GIANT_SOUND = f"{SOUNDS_FOLDER}ast-hit-giant.mp3"
 ASTEROIDS_HUGE_EXP_SOUND = f"{SOUNDS_FOLDER}ast-hit-huge-exp.mp3"
 ASTEROIDS_GIANT_EXP_SOUND = f"{SOUNDS_FOLDER}ast-hit-giant-exp.mp3"
+# Ufo
+UFO_FLY_SOUND = f"{SOUNDS_FOLDER}ufo-fly.mp3"
+UFO_LASER_SOUND = f"{SOUNDS_FOLDER}ufo-lasr.mp3"
+UFO_EXP_SOUND = f"{SOUNDS_FOLDER}ufo-exp.mp3"
 # menu
 MENU_SELECT_SOUND = f"{SOUNDS_FOLDER}menu-selct.mp3"
 MENU_START_SOUND = f"{SOUNDS_FOLDER}menu-start.mp3"
@@ -81,6 +85,10 @@ GUN_UPGRADE_ATTRIBUTES = {
 SHIP_LAYOUT = [["+", 0, 0, 0], ["A", 0, 1, 0], ["H", 0, 2, 1], [
     "=", -1, 2, 0], ["=", 1, 2, 0], ["_", -2, 2, 0], ["_", 2, 2, 0], ['*', 0, 3, 2]]
 SHIP_COLORS = [BLUE, WHITE, RED]
+
+# UFO LAYOUT [text character, x, y, color reference]
+UFO_LAYOUT = [["=", -1, 0, 0], ["=", 1, 0, 0], ["/", -2, 0, 1], ["\\", 2, 0, 1],["_", 0, -1, 1]]
+UFO_COLORS = [YELLOW, AQUA, GREEN]
 
 # ASTEROID ATTRIBUTES - - - - - - - - - - - - - - - -
 
@@ -316,7 +324,15 @@ GAME_STAGES = [
             },
             {
                 "delaystart": 0,
-                "duration": 10,
+                "duration": 1,
+                "enemytypes": ["ufo"],
+                "waitspawn": 10,
+                "y_randomness": 5,
+                "stagedisplay": "none"
+            },
+            {
+                "delaystart": 6,
+                "duration": 6,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-small-xmove", "asteroid-huge", "asteroid-small-xmove"],
                 "waitspawn": 1.3,
                 "y_randomness": 10,
@@ -417,6 +433,14 @@ GAME_STAGES = [
                 "stagedisplay": "none"
             },
             {
+                "delaystart": 3,
+                "duration": 10,
+                "enemytypes": ["ufo"],
+                "waitspawn": 5,
+                "y_randomness": 5,
+                "stagedisplay": "none"
+            },
+            {
                 "delaystart": 1,
                 "duration": 3,
                 "enemytypes": ["asteroid-medium"],
@@ -494,6 +518,14 @@ GAME_STAGES = [
                 "stagedisplay": "none"
             },
             {
+                "delaystart": 3,
+                "duration": 10,
+                "enemytypes": ["ufo"],
+                "waitspawn": 3,
+                "y_randomness": 5,
+                "stagedisplay": "none"
+            },
+            {
                 "delaystart": 0,
                 "duration": 3,
                 "stagedisplay": "You beat the game! (So far)"
@@ -501,7 +533,7 @@ GAME_STAGES = [
             {
                 "delaystart": 0,
                 "duration": 100,
-                "enemytypes": ["asteroid-small-xmove", "asteroid-giant"],
+                "enemytypes": ["asteroid-small-xmove", "asteroid-giant", "ufo"],
                 "waitspawn": 0.8,
                 "y_randomness": 5,
                 "stagedisplay": "none"

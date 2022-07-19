@@ -26,6 +26,10 @@ class AudioService:
         self._sounds['ast-hit-giant'] = pyray.load_sound(constants.ASTEROIDS_HIT_GIANT_SOUND)
         self._sounds['ast-exp-huge'] = pyray.load_sound(constants.ASTEROIDS_HUGE_EXP_SOUND)
         self._sounds['ast-exp-giant'] = pyray.load_sound(constants.ASTEROIDS_GIANT_EXP_SOUND)
+        # ufo
+        self._sounds['ufo-fly'] = pyray.load_sound(constants.UFO_FLY_SOUND)
+        self._sounds['ufo-laser'] = pyray.load_sound(constants.UFO_LASER_SOUND)
+        self._sounds['ufo-exp'] = pyray.load_sound(constants.UFO_EXP_SOUND)
         # menu
         self._sounds['menu-select'] = pyray.load_sound(constants.MENU_SELECT_SOUND)
         self._sounds['menu-start'] = pyray.load_sound(constants.MENU_START_SOUND)
@@ -53,6 +57,15 @@ class AudioService:
     def play_sound(self, sound):
         """ plays sound using string and looking it up in _sounds dictionary"""
         pyray.play_sound(self._sounds[sound])
+
+    def set_loop_sound(self, sound):
+        """ plays sound using string and looking it up in _sounds dictionary
+            checks to see if it's already playing"""
+        # only plays one at a time
+        if not pyray.is_sound_playing(self._sounds[sound]):
+            pyray.play_sound(self._sounds[sound])
+
+
 
     def set_music(self, music):
         """ plays music using string and looking it up in _sounds dictionary
