@@ -139,7 +139,7 @@ class HandleCollisionsAction(Action):
         # get reference to ship
         ship = cast.get_first_actor("ships")
 
-        # don't check if ships hurt timer is on
+        # check if ships hurt timer is on
         if ship.get_is_hurt() == False:
 
             # get list of ship parts
@@ -209,7 +209,7 @@ class HandleCollisionsAction(Action):
         # get reference to ship
         ship = cast.get_first_actor("ships")
 
-        # don't check if ships hurt timer is on
+        # check if ships hurt timer is on
         if ship.get_is_hurt() == False:
 
             # get list of ship parts
@@ -221,17 +221,18 @@ class HandleCollisionsAction(Action):
             for part in parts:
                 if hit: break
 
-                # loop through every enemy in this group
+                # loop through every laser
                 for laser in cast.get_actors("lasers"):
                     if hit: break
 
-                    # if this ship part is colliding with this enemy part
+                    # if this ship part is colliding with this laser
                     if part.get_position().equals(laser.get_position()):
                         # set hit to true so we can break the loop and only apply one hit at a time
                         hit = True
 
                         # get reference to shields instance
                         shields = cast.get_first_actor("shields")
+                        # apply appropriate damage to player shields
                         shields.add_points( - laser.get_damage())
 
                         # create sparks that bounce off player ship
@@ -243,7 +244,7 @@ class HandleCollisionsAction(Action):
                         if ship.get_velocity().get_x() < 0: # left
                             self._create_sparks(cast, 20, part.get_position(), 10, 23, 190, 40)
 
-                        # remove all the enemies health
+                        # remove the laser
                         cast.remove_actor("lasers", laser)
 
                         # if we have less than 0 shields now

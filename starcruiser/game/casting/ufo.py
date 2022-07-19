@@ -25,7 +25,7 @@ class Ufo(Actor):
     def __init__(self, cast, audio_service):
         super().__init__()
         self._cast = cast
-
+        # enemy attributes
         self._health = 2
         self._damage = 2
         self._points = 8
@@ -35,12 +35,12 @@ class Ufo(Actor):
         # prepare ufo body structure
         self.set_text('H')
         self.set_color(constants.YELLOW)
+        # create empty parts list
         self._parts = [self]
+        # control ufo shooting
         self._shoot_wait = 0
-        # allow ufo to play sounds
+        # allow ufo to play a flying loop sound
         self._audio_service = audio_service
-
-        
 
     def get_parts(self):
         return self._parts
@@ -140,19 +140,20 @@ class Ufo(Actor):
             self._cast.remove_actor("ufos", self)
         else:
 
-            # play flying ufo loop
+            # make sure flying ufo sound loop is playing
             self._audio_service.set_loop_sound("ufo-fly")
 
-            # if we are the first part
+            # randomly reverse x movement to move side to side
             if random.random() > 0.93:
                 self._velocity._x = -self._velocity._x
 
+            # randomly move downward towards the player
             if random.random() > 0.8:
                 self._velocity._y = constants.CELL_SIZE
             else:
                 self._velocity._y = 0
 
-            # otherwise apply movement to ufo (all parts)
+            # apply movement to ufo (all parts)
             for part in self._parts:
                 # wrap x
                 x = (part._position.get_x() + self._velocity.get_x()) % constants.MAX_X
@@ -162,10 +163,13 @@ class Ufo(Actor):
 
             # handle shooting
             if self._shoot_wait > 0:
+                # increment the shoot timer
                 self._shoot_wait -= 1
             else:
+                # if the timer is zero
                 ship = self._cast.get_first_actor("ships")
-                if abs(ship.get_position().get_x() - self._position._x) < 5:
+                # check to see if the ship is below our x position (within 3cells away)
+                if abs(ship.get_position().get_x() - self._position._x) < 3 * constants.CELL_SIZE:
                     if self._shoot_wait == 0:
                         # apply attributes to a new instance of laser
                         laser = Laser(self._cast)
@@ -178,7 +182,6 @@ class Ufo(Actor):
                         self._cast.add_actor("lasers", laser)
                         # wait before shooting again
                         self._shoot_wait = 2
-
                         # play ufo laser sound
                         self._audio_service.play_sound("ufo-laser")
 
