@@ -1,6 +1,12 @@
-# game name
+# Star Cruiser 5000
+Arcade style asteroid / alien shooter with seven stages, two weapon upgrades, seven enemy types, and a highscore table.
 
-Game description
+Controls:
+Left/Right arrow keys = move ship
+Spacebar = shoot laser
+Enter = Pause / select menu item
+A-Z keys to enter initials into highscore table
+Backspace/arrow keys = go back / move initials selection for highscore table input
 
 ## Getting Started
 
@@ -26,7 +32,7 @@ The project files and folders are organized as follows:
 ```
 
 root (project root folder)
-+-- GAME NAME HERE (source code for game)
++-- starcruiser (source code for game)
 +-- game (specific game classes)
 +-- **main**.py (entry point for program)
 +-- README.md (general info)
@@ -41,13 +47,9 @@ root (project root folder)
 ## Authors
 ---
 Kyle Coulon (kylejcoulon@gmail.com)
-* TODO: Add your name and email here
-
 
 
 ```
-
-DESIGN DOCUMENT:
 
 # Peter
 
@@ -55,7 +57,6 @@ DESIGN DOCUMENT:
 
 # Kyle
 
-# Alex
 
 EXTRA DESIGN DOCUMENT:
 
