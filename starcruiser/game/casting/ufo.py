@@ -26,7 +26,7 @@ class Ufo(Actor):
         super().__init__()
         self._cast = cast
         # enemy attributes
-        self._health = 2
+        self._health = 3
         self._damage = 2
         self._points = 8
         # for audio

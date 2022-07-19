@@ -326,12 +326,12 @@ GAME_STAGES = [
                 "delaystart": 0,
                 "duration": 1,
                 "enemytypes": ["ufo"],
-                "waitspawn": 10,
+                "waitspawn": 4,
                 "y_randomness": 5,
                 "stagedisplay": "none"
             },
             {
-                "delaystart": 6,
+                "delaystart": 4,
                 "duration": 6,
                 "enemytypes": ["asteroid-large", "asteroid-large", "asteroid-small-xmove", "asteroid-huge", "asteroid-small-xmove"],
                 "waitspawn": 1.3,
