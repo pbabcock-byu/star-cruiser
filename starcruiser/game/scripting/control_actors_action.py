@@ -3,8 +3,6 @@ from game.scripting.action import Action
 from game.shared.point import Point
 from game.casting.actor import Actor
 from game.casting.laser import Laser
-# need this module to play sounds
-from playsound import playsound
 
 
 class ControlActorsAction(Action):
@@ -29,7 +27,7 @@ class ControlActorsAction(Action):
         # key press only vs key hold and laser timer
         self._key_fire = False
         self._key_fire_timer = 0
-        
+
         # stores player movement direction
         self._player_direction = Point(0, 0)
 
@@ -79,7 +77,8 @@ class ControlActorsAction(Action):
                 # if we are any other gun type, limit the number of shots
                 if ship.get_gun_type() != "single":
                     # get the wait time for this gun type from constants
-                    self._key_fire_timer = constants.GUN_UPGRADE_ATTRIBUTES[ship.get_gun_type()][1]
+                    self._key_fire_timer = constants.GUN_UPGRADE_ATTRIBUTES[ship.get_gun_type(
+                    )][1]
                     # check if we've reached max shots
                     if ship.get_upgrade_shots() < constants.GUN_UPGRADE_ATTRIBUTES[ship.get_gun_type()][0]:
                         ship.set_upgrade_shots(ship.get_upgrade_shots() + 1)
@@ -87,8 +86,6 @@ class ControlActorsAction(Action):
                         # reset to zero
                         ship.set_upgrade_shots(0)
                         ship.set_gun_type("single")
-
-
 
                 # get the position of the front of the ship (part zero)
                 ship_parts = ship.get_parts()
@@ -112,7 +109,7 @@ class ControlActorsAction(Action):
 
                 # velocity to move upward
                 velocity = Point(0, -constants.CELL_SIZE)
-                
+
                 def make_laser():
                     # apply attributes to a new instance of laser
                     laser = Laser(cast)
@@ -132,21 +129,21 @@ class ControlActorsAction(Action):
                     laser.set_damage(2)
                     # get a location point one cell to the left
                     position = Point(ship_position.get_x() - 1 * constants.CELL_SIZE,
-                                    ship_position.get_y()) 
-                    #make another laser
+                                     ship_position.get_y())
+                    # make another laser
                     laser = make_laser()
                     laser.set_damage(2)
                     # add laser to the "lasers" cast
                     cast.add_actor("lasers", laser)
 
-                     # get a location point one cell to the right
+                    # get a location point one cell to the right
                     position = Point(ship_position.get_x() + 1 * constants.CELL_SIZE,
-                                    ship_position.get_y())   
-                    #make another laser
-                    laser = make_laser()   
+                                     ship_position.get_y())
+                    # make another laser
+                    laser = make_laser()
                     laser.set_damage(2)
                     # add laser to the "lasers" cast
-                    cast.add_actor("lasers", laser)                        
+                    cast.add_actor("lasers", laser)
 
         # handle rapid fire wait timer and key hold
         if self._key_fire == True:
