@@ -53,13 +53,13 @@ class handleMenuSystem(Action):
 
             menu values (list of strings) to display for a given menu
             menu heights (factor between zero and one) percentage of screen height as location to display the three menu elements
-            
+
         """
         self._keyboard_service = keyboard_service
         self._video_service = video_service
         self._audio_service = audio_service
         self._draw_actors_instance = draw_actors_instance
-        #class instances stored for game play
+        # class instances stored for game play
         self._control_actions_action = 0
         self._move_actors_action = 0
         self._handle_collision_action = 0
@@ -95,7 +95,6 @@ class handleMenuSystem(Action):
             "", "", "MAIN MENU"]
         self._highscore_menu_heights = [0.15, 0.3, 0.85]
         # - - - - - - - - - - - - - - - - -
-
 
     def set_game_over(self, game_over):
         self._game_over = game_over
@@ -150,7 +149,7 @@ class handleMenuSystem(Action):
         # if the game isn't over
         if not self._game_over:
             # play music depending on game/menu state
-            if self._menu_state == "start"  or self._menu_state == "credits": 
+            if self._menu_state == "start" or self._menu_state == "credits":
                 # play game music
                 self._audio_service.set_music("menu-music")
 
@@ -165,11 +164,12 @@ class handleMenuSystem(Action):
         if self._menu_state != "none" and self._menu_populated == False:
             # set populated to true (so this only runs once)
             self._menu_populated = True
-            
+
             # if the desired menu state is the "start" menu
             if self._menu_state == "start":
                 # update menu to start menu text values / display heights
-                self._update_menu_items(cast, self._start_menu_values, self._start_menu_heights)
+                self._update_menu_items(
+                    cast, self._start_menu_values, self._start_menu_heights)
                 # find position for game title
                 position = Point(int(constants.MAX_X / 2),
                                  int(constants.MAX_Y * 0.2))
@@ -211,7 +211,7 @@ class handleMenuSystem(Action):
                     self._initial_highlighted = 0
                     # do not hightlight the main menu items yet (because they are entering initials now)
                     self._menu_item_highlighted = -1
-                
+
                 else:
                     # did not get a highscore
                     self._highscore_menu_values[0] = "You did not get a high score."
@@ -220,7 +220,8 @@ class handleMenuSystem(Action):
                     self._menu_item_highlighted = 2
 
                 # update menu display text to high score menu
-                self._update_menu_items(cast, self._highscore_menu_values, self._highscore_menu_heights)
+                self._update_menu_items(
+                    cast, self._highscore_menu_values, self._highscore_menu_heights)
                 self._update_menu_item_highlighted()
                 # display the highscore table
                 self._display_highscore_table(cast)
@@ -253,9 +254,11 @@ class handleMenuSystem(Action):
                     if try_letter_key != False:
                         self._key_is_pressed = True
                         # set the selected initials text value to that letter
-                        self._initials[self._initial_highlighted] = try_letter_key.upper()
+                        self._initials[self._initial_highlighted] = try_letter_key.upper(
+                        )
                         # set the actors text value to match
-                        self._initials_actors[self._initial_highlighted].set_text(try_letter_key.upper())
+                        self._initials_actors[self._initial_highlighted].set_text(
+                            try_letter_key.upper())
                         # cursor forward to highlight the next initial
                         self._initial_highlighted += 1
                         # clamp typing to stop at last initial
@@ -267,12 +270,14 @@ class handleMenuSystem(Action):
                     elif self._keyboard_service.is_key_down('right'):
                         self._key_is_pressed = True
                         # cursor forward to highlight the next initial
-                        self._initial_highlighted = (self._initial_highlighted + 1) % 3
+                        self._initial_highlighted = (
+                            self._initial_highlighted + 1) % 3
 
                     elif self._keyboard_service.is_key_down('left'):
                         self._key_is_pressed = True
                         # cursor forward to highlight the previous initial
-                        self._initial_highlighted = (self._initial_highlighted - 1) % 3
+                        self._initial_highlighted = (
+                            self._initial_highlighted - 1) % 3
 
                     elif self._keyboard_service.is_key_down('back'):
                         self._key_is_pressed = True
@@ -281,7 +286,6 @@ class handleMenuSystem(Action):
                         # clamp backspace to stop at first initial
                         if self._initial_highlighted < 0:
                             self._initial_highlighted = 0
-                        
 
                     if self._key_is_pressed == True:
                         # update which initials is highlighted if a key was pressed
@@ -302,7 +306,8 @@ class handleMenuSystem(Action):
                         self._highscore_menu_values[0] = ""
                         self._highscore_menu_values[1] = ""
                         # apply text values/colors
-                        self._update_menu_items(cast, self._highscore_menu_values, self._highscore_menu_heights)
+                        self._update_menu_items(
+                            cast, self._highscore_menu_values, self._highscore_menu_heights)
                         # play menu select sound
                         self._audio_service.play_sound("menu-select")
 
@@ -332,7 +337,7 @@ class handleMenuSystem(Action):
                         # open start menu
                         self._menu_state = "start"
                         # highlight the "ENTER TO START" menu item by default
-                        self._menu_item_highlighted = 0 
+                        self._menu_item_highlighted = 0
                         # apply color
                         self._update_menu_item_highlighted()
                         # play menu select sound
@@ -373,7 +378,8 @@ class handleMenuSystem(Action):
                             # apply highlight color
                             self._update_menu_item_highlighted()
                             # update menu text values / positions
-                            self._update_menu_items(cast, self._credits_menu_values, self._credits_menu_heights)
+                            self._update_menu_items(
+                                cast, self._credits_menu_values, self._credits_menu_heights)
                             # play menu select sound
                             self._audio_service.play_sound("menu-select")
 
@@ -399,7 +405,7 @@ class handleMenuSystem(Action):
 
                         # as long as it's not game over
                         if self._game_over != True:
-                            
+
                             # play pause sound
                             self._audio_service.play_sound("menu-select")
 
@@ -418,6 +424,9 @@ class handleMenuSystem(Action):
                                 cast.add_actor("menus", pause_message)
                                 # run pause game method to stop gameplay action scripts
                                 self.pause_game(script)
+                                # play menu select sound if up or down was pressed
+                                self._audio_service.play_sound("menu-select")
+
                             else:
                                 # UNPAUSE the game
                                 self._paused = False
@@ -426,7 +435,8 @@ class handleMenuSystem(Action):
                                 # get rid of pause display message
                                 self._close_menu(cast)
                                 # tell the enemy creator to start it's timer again
-                                self._handle_enemy_creation_action.set_paused(False)
+                                self._handle_enemy_creation_action.set_paused(
+                                    False)
 
                 # if we are looking at the start menu
                 if self._menu_state == "start":
@@ -434,18 +444,20 @@ class handleMenuSystem(Action):
                     if self._keyboard_service.is_key_down('up'):
                         self._key_is_pressed = True
                         # when the player presses the up arrow, change the menu selection
-                        self._menu_item_highlighted = (self._menu_item_highlighted - 1) % 3
+                        self._menu_item_highlighted = (
+                            self._menu_item_highlighted - 1) % 3
                         # update text colors
                         self._update_menu_item_highlighted()
+                        # play menu select sound if up or down was pressed
+                        self._audio_service.play_sound("menu-select")
 
                     if self._keyboard_service.is_key_down('down'):
                         self._key_is_pressed = True
                         # when the player presses the down arrow, change the menu selection
-                        self._menu_item_highlighted = (self._menu_item_highlighted + 1) % 3
+                        self._menu_item_highlighted = (
+                            self._menu_item_highlighted + 1) % 3
                         # update text colors
                         self._update_menu_item_highlighted()
-
-                    if self._key_is_pressed:
                         # play menu select sound if up or down was pressed
                         self._audio_service.play_sound("menu-select")
 
@@ -453,7 +465,6 @@ class handleMenuSystem(Action):
                 # reset key pressed when the player lets up of the key
                 if self._keyboard_service.is_key_up('enter') and self._keyboard_service.is_key_up('up') and self._keyboard_service.is_key_up('down'):
                     self._key_is_pressed = False
-
 
     def _update_initials_highlighted(self):
         """Updates the color values of initial actors to display current selection
@@ -512,7 +523,7 @@ class handleMenuSystem(Action):
 
     def _update_menu_item_highlighted(self):
         """Updates the color values of the menu actors to display current selection
-        """        
+        """
         for i in range(0, 3):
             # if this index is selected
             if i == self._menu_item_highlighted:
@@ -526,9 +537,11 @@ class handleMenuSystem(Action):
         """Start the game by setting scripts to run and creating instances of gameplay actor classes.
         """
         # create instances of actions - - -
-        self._control_actions_action = ControlActorsAction(self._keyboard_service, self._audio_service)
+        self._control_actions_action = ControlActorsAction(
+            self._keyboard_service, self._audio_service)
         self._move_actors_action = MoveActorsAction()
-        self._handle_collision_action = HandleCollisionsAction(self, self._audio_service)
+        self._handle_collision_action = HandleCollisionsAction(
+            self, self._audio_service)
 
         # add scripts to run
         script.add_action("input", self._control_actions_action)
@@ -538,7 +551,8 @@ class handleMenuSystem(Action):
         # if we are first setting up the game (as opposed to unpausing)
         if initialStart == True:
             # enemy creator action remains persistent so it's only created once here
-            self._handle_enemy_creation_action = HandleEnemyCreation(self._audio_service)
+            self._handle_enemy_creation_action = HandleEnemyCreation(
+                self._audio_service)
             # add it to scripts
             script.add_action("update", self._handle_enemy_creation_action)
 
@@ -576,9 +590,9 @@ class handleMenuSystem(Action):
             # if our end score was higher than this one
             if self._end_score >= int(score_split[1]) and inserted == -1:
                 if idx == 0:
-                    inserted = 1 # new high score!
+                    inserted = 1  # new high score!
                 else:
-                    inserted = 0 # made it to the high score table
+                    inserted = 0  # made it to the high score table
                 # insert a blank line into this index of the list to make space for player initials display
                 lines.insert(idx, "")
         # save this new edited version of the list
@@ -598,7 +612,8 @@ class handleMenuSystem(Action):
                     file.write(self._high_scores[i])
                 else:
                     # write the new player initials and new score to the file
-                    file.write(f'{self._initials[0]}{self._initials[1]}{self._initials[2]}  {str(self._end_score)}')
+                    file.write(
+                        f'{self._initials[0]}{self._initials[1]}{self._initials[2]}  {str(self._end_score)}')
                 # new line after each score
                 file.write("\n")
 
@@ -621,7 +636,8 @@ class handleMenuSystem(Action):
                     initial = Actor()
                     # set text to default initials array ("A","A","A")
                     initial.set_text(self._initials[j])
-                    initial.set_position(Point(position.get_x() + j * 14, position.get_y()))
+                    initial.set_position(
+                        Point(position.get_x() + j * 14, position.get_y()))
                     initial.set_font_size(20)
                     # set the first initial to yellow to show we are editing it
                     if j == 0:
