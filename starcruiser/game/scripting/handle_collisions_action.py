@@ -5,8 +5,6 @@ from game.scripting.action import Action
 from game.shared.point import Point
 from game.casting.explosion import Explosion
 from game.casting.spark import Spark
-# need this module to play sounds
-from playsound import playsound
 
 
 class HandleCollisionsAction(Action):
