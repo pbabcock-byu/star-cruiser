@@ -34,14 +34,13 @@ class Spark(Actor):
         self._direction = radians(direction)
 
     def move_next(self):
-        """ (OVERRIDE) moves sparks and destroys when outside window or brightness is zero
+        """ (Override of Actor's method) - Moves sparks and destroys when outside window or brightness is zero
         """
         # if spark goes outside the screen or brightness is zero
         if self._position._x >= constants.MAX_X or self._position._x <= 0 or self._position._y <= 0 or self._position._y >= constants.MAX_Y or self._bright <= 0:
             # delete it
             self._cast.remove_actor("sparks", self)
         else:
-            
             # calculate relative x/y movement based on direction and speed
             self._velocity._x = self._speed * cos(self._direction)
             self._velocity._y = self._speed * sin(self._direction)
@@ -53,10 +52,8 @@ class Spark(Actor):
 
             # dim spark brightness over time
             self._bright -= self._dim_speed
-            # if less than zero
-            if(self._bright < 0):
-                # avoid error
-                self._bright = 0
-                
-            # apply color
+            # no less than zero
+            self._bright = max(self._bright, 0)
+
+            # apply new color
             self.set_color(Color(self._bright, self._bright, self._bright))

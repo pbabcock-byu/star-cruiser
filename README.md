@@ -44,19 +44,10 @@ root (project root folder)
 * Python 3.8.0
 * Raylib Python CFFI 3.7
 
-## Authors
+## Author
 ---
 Kyle Coulon (kylejcoulon@gmail.com)
-
-
 ```
-
-# Peter
-
-# Rachel
-
-# Kyle
-
 
 EXTRA DESIGN DOCUMENT:
 
