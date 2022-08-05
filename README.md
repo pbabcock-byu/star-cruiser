@@ -1,12 +1,12 @@
 # Star Cruiser 5000
-Arcade style asteroid / alien shooter with seven stages, two weapon upgrades, seven enemy types, and a highscore table.
+Arcade style space shooter game with seven stages, three weapons, seven enemy types, and a highscore table.
 
 Controls:
-Left/Right arrow keys = move ship
-Spacebar = shoot laser
-Enter = Pause / select menu item
-A-Z keys to enter initials into highscore table
-Backspace/arrow keys = go back / move initials selection for highscore table input
+Left/Right arrow keys: move ship,
+Spacebar: shoot laser,
+Enter: Pause / select menu item,
+A-Z keys: enter initials into highscore table,
+Backspace/arrow keys: go back / move initials selection for highscore table input
 
 ## Getting Started
 
