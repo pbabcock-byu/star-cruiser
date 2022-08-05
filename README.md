@@ -21,8 +21,13 @@ python3 -m pip install raylib
 After you've installed the required libraries, open a terminal and browse to the project's root folder. Start the program by running the following command.
 
 ```
-python3 star-cruiser
+python3 starcruiser
 ```
+or
+```
+python starcruiser
+```
+
 You can also run the program from an IDE like Visual Studio Code. Start your IDE and open the
 project folder. Select the main module inside the hunter folder and click the "run" icon.
 
