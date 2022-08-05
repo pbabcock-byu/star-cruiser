@@ -29,7 +29,7 @@ project folder. Select the main module inside the hunter folder and click the "r
 ## Project Structure
 ---
 The project files and folders are organized as follows:
-
+```
 root (project root folder)
 +-- starcruiser (source code for game)
 +-- game (specific game classes)
@@ -46,6 +46,7 @@ root (project root folder)
 ## Author
 ---
 Kyle Coulon (kylejcoulon@gmail.com)
+
 ```
 DESIGN DOCUMENT:
 
@@ -128,3 +129,5 @@ DESIGN DOCUMENT:
 - - - - - - - - ADDITIONAL TASKS
                 High resolution? (smaller grid size and font, use widths for collision instead of position.equals?)
                 Use images?
+
+```
