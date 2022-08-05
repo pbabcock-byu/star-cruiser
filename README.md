@@ -48,8 +48,7 @@ root (project root folder)
 ---
 Kyle Coulon (kylejcoulon@gmail.com)
 ```
-
-EXTRA DESIGN DOCUMENT:
+DESIGN DOCUMENT:
 
 - - - - - - - - ACTOR
                 similar to past actor classes, but will create a generate_structure(layout) method that takes an array of structure data and generates a group of actors at the given positions and with the given text values, colors, etc. That way the spaceship and asteroids can be made of more than one piece.
