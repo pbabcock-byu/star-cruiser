@@ -51,7 +51,9 @@ root (project root folder)
 ## Author
 ---
 Kyle Coulon (kylejcoulon@gmail.com) https://github.com/kylecooltron/star-cruiser
+
 Peter Babcock https://github.com/pbabcock-byu/star-cruiser
+
 Rachel Knight https://github.com/orangecat268
 
 ```
